@@ -1,0 +1,83 @@
+\documentclass[12pt]{article}
+
+\usepackage{fullpage}
+\usepackage{/Users/nick/documents/math/analysis}
+\usepackage{listings}
+\usepackage{verbatim}
+
+\begin{document}
+\title{FrameLab\\\small{Software for framelet-based numerical analysis}}
+\author{Nick Henscheid\\\small{ University of Arizona Program in Applied Mathematics}}
+\date{\today}
+\maketitle
+
+\paragraph{Goals}
+The idea of this project is to develop a complete software suite for computational imaging via framelets.  The code will be sorted into the following general categories: 
+
+\begin{enumerate}
+\item Framelet expansion code 
+\begin{itemize}
+\item Fast single and multilevel decomposition and reconstruction for 1D through 3D
+\item Signal sparsity analysis, best basis selection?
+\item Computing framelet coefficients 
+\end{itemize}
+\item Numerical optimization code 
+\begin{itemize}
+\item $l_1$ compressed sensing via ADMM/AL/DAL 
+\item Comparison of different algorithms?
+\item $l_0$ code 
+\end{itemize}
+\item Utilities 
+\begin{itemize}
+\item Graphics and figure creation 
+\item Shrinkage designer 
+\item PDEs for image processing
+\item Forward/adjoint operators for imaging 
+\item Classical signal processing 
+\end{itemize}
+\item Applications 
+\begin{itemize}
+\item CT 
+\item MRI 
+\item SPECT 
+\item Segmentation 
+\item Registration? 
+\item Deblurring 
+\item Deconvolution 
+\item Integral equations?
+\item Matrix factorization?
+\item Matrix completion 
+\item BM3D
+\end{itemize}
+\end{enumerate}
+
+
+\section{Implementation Details}
+
+\paragraph{Programming languages and interfaces}
+To do: 
+\begin{itemize}
+\item GPU interface to python?  pycuda?  (e.g. python alternative to mex)
+\end{itemize}
+
+\paragraph{Data Types}
+
+
+
+\section{Framelet Expansions}
+The first task to create/modify functions to perform framelet decomposition and reconstruction 
+
+
+\section{Optimization Methods}
+%\lstinputlisting[numbers=left,language=Matlab,frame=single,caption={}Matlab function to solve the analysis-based sparse recovery problem via Augmented Lagrangian.]{../optimization/ALsolve.m}
+
+
+\section{Imaging Systems}  
+\subsection{2D Computed Tomography}
+
+
+\subsection{3D Computed Tomography}
+
+ 
+
+\end{document}
