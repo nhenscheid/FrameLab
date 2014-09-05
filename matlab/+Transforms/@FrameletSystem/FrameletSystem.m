@@ -17,11 +17,11 @@ classdef FrameletSystem
                 obj.level = level;
                 switch type
                     case 'haar'
-                        [obj.D,obj.R] = GenerateFrameletFilter(0);
+                        [obj.D,obj.R] = obj.GenerateFrameletFilter(0);
                     case 'linear'
-                        [obj.D,obj.R] = GenerateFrameletFilter(1);
+                        [obj.D,obj.R] = obj.GenerateFrameletFilter(1);
                     case 'cubic'
-                        [obj.D,obj.R] = GenerateFrameletFilter(3);
+                        [obj.D,obj.R] = obj.GenerateFrameletFilter(3);
                     otherwise
                         %Throw some error
                 end%Switch type
@@ -52,6 +52,10 @@ classdef FrameletSystem
            %output is a Matlab array of dimension obj.dim (should check
            %that dim(alpha) = obj.dim!!)
         end
-        
     end%Methods
+    
+    
+    methods(Static,Access=private)
+        [D,R]=GenerateFrameletFilter(frame);
+    end
 end
