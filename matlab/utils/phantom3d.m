@@ -68,6 +68,7 @@ function [p,ellipse]=phantom3d(varargin)
 %
 %   Portions of this code are based on phantom.m, copyrighted by the Mathworks
 %
+disp('Computing 3D Phantom...');
 
 [ellipse,n] = parse_inputs(varargin{:});
 
@@ -113,6 +114,8 @@ for k = 1:size(ellipse,1)
 end
 
 p = reshape(p,[n n n]);
+
+disp('Done!');
 
 return;
 

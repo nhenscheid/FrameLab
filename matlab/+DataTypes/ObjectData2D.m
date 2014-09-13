@@ -1,4 +1,4 @@
-classdef ObjectData2D
+classdef ObjectData2D < handle
     properties (SetAccess = private)
         meshType = 'cartesian'; %later: perhaps triangulated etc?
         Nx = 256; 
@@ -42,6 +42,7 @@ classdef ObjectData2D
             %present object's data array using the FrameletSystem system.
             alpha = sys.forwardTransform(obj.dataArray);
         end%frameletTransform
+        
     end%Methods
 end%Classdef
         

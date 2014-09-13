@@ -35,9 +35,9 @@ classdef FrameletSystem
             %dim(u)=obj.dim!!)
             switch obj.dim
                 case 2
-                    alpha = FraDecMultiLevel2D(u,obj.D,obj.level);
+                    alpha = obj.FraDecMultiLevel2D(u,obj.D,obj.level);
                 case 3
-                    alpha = FraDecMultiLevel3D(u,obj.D,obj.level);
+                    alpha = obj.FraDecMultiLevel3D(u,obj.D,obj.level);
                 otherwise
                     %Throw some error
             end
@@ -48,14 +48,26 @@ classdef FrameletSystem
         
         function u = adjointTransform(obj,alpha)
            %adjointTransform computes the adoint framelet transform of
-           %alpha.  alpha must be an object of type FrameletExpansion.  The
-           %output is a Matlab array of dimension obj.dim (should check
-           %that dim(alpha) = obj.dim!!)
+           %alpha.  alpha is a cell array (FrameletExpansion.frameletArray)
+           %The output is a Matlab array of dimension obj.dim 
+           %(should check that dim(alpha) = obj.dim!!)
+           switch obj.dim
+                case 2
+                    u = obj.FraRecMultiLevel2D(alpha,obj.R,obj.level);
+                case 3
+                    u = obj.FraRecMultiLevel3D(alpha,obj.R,obj.level);
+                otherwise
+                    %Throw some error
+           end
         end
     end%Methods
     
     
     methods(Static,Access=private)
-        [D,R]=GenerateFrameletFilter(frame);
+        [D,R]= GenerateFrameletFilter(frame);
+        alpha = FraDecMultiLevel2D(A,D,L);
+        alpha = FraDecMultiLevel3D(A,D,L);
+        u = FraRecMultiLevel2D(alpha,R,L);
+        u = FraRecMultiLevel3D(alpha,R,L);
     end
 end

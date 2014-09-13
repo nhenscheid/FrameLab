@@ -2,11 +2,29 @@
 \usepackage{fullpage}
 
 
-\title{FrameLab}
+\title{FrameLab: Development Guide}
+\date{\today}
 
 \begin{document}
 \maketitle
 
+\section{Overall Design}
+FrameLab 1.0 is designed to have an object-oriented, user friendly scripting interface with compute intensive routines written in compiled languages such as C and CUDA/C.  The current scripting language is Matlab, using MEX as an interface mechanism to pull in compiled libraries.  In the future we plan to implement Python/iPython as an alternative to Matlab, to keep the entire code open-source.
+
+\section{Matlab OOP System}
+The primary goal of Framelab is to solve general linear inverse problems of the sort 
+\begin{align*}
+Au = f_0 + \eta 
+\end{align*} FrameLab supports models of the type: 
+\begin{align*}
+\min R(u) \quad \text{such that}\quad F(u)<\epsilon 
+\end{align*}where $R(u)$ is a generic regularization term, typically of the form 
+\begin{align*}
+R(u) = \|Wu\|_1
+\end{align*}
+
+
+\section{Compute Kernels}
 
 
 \end{document}

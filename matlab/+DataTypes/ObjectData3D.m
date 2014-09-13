@@ -1,4 +1,4 @@
-classdef ObjectData3D
+classdef ObjectData3D < handle
     properties (SetAccess = private)
         meshType = 'cartesian'; %later: perhaps triangulated etc?
         Nx = 256; 
@@ -50,6 +50,13 @@ classdef ObjectData3D
             %present object's data array using the FrameletSystem system.
             alpha = sys.forwardTransform(obj.dataArray);
         end%frameletTransform    
+        
+        function adjointFrameletTransform(obj,sys,alpha)
+            %adjointFrameletTransform replaces this object's data array
+            %with W^T\alpha, where W is specified by the FrameletTransform
+            %object sys and alpha is an object of FrameletExpansion type.
+            obj.dataArray = alpha.adjointFrameletTransform(sys);
+        end
     end %Methods
 end%Classdef
         
