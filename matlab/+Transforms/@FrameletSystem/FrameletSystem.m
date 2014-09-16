@@ -45,7 +45,6 @@ classdef FrameletSystem
        
         end
         
-        
         function u = adjointTransform(obj,alpha)
            %adjointTransform computes the adoint framelet transform of
            %alpha.  alpha is a cell array (FrameletExpansion.frameletArray)
@@ -61,7 +60,6 @@ classdef FrameletSystem
            end
         end
     end%Methods
-    
     
     methods(Static,Access=private)
         [D,R]= GenerateFrameletFilter(frame);

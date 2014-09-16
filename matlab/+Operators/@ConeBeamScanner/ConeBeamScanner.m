@@ -30,17 +30,5 @@ classdef ConeBeamScanner < handle
         function plotGeometry()
             %Do nothing 
         end
-        
-        function y=doScan(this,object)
-            this.setPara(object); %set the Gao parameter struct
-            X0 = object.dataArray(:);
-            this.checkInputs(X0);
-            disp('computing forward cone beam transform!');
-            size(X0)
-            this.para
-            y = Ax_cone_mf(X0,this.para);
-        end
-        
-
     end%Static methods
 end
