@@ -23,7 +23,10 @@ classdef ConeBeamScanner < handle
                 obj.Nv = Nv;
             end
         end%Constructor
-    end
+        
+        %***Forward scan***%
+        y = doScan(this,object)
+    end %Methods 
     
     methods (Static = true)
         %***Geometry Plotter***%
