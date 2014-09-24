@@ -1,5 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage{fullpage}
+\usepackage{/home/nick/Documents/research/research}
+\usepackage{verbatim}
 
 
 \title{FrameLab: Development Guide}
@@ -25,8 +27,35 @@ R(u) = \|Wu\|_1
 
 
 \section{Compute Kernels}
+\subsection{Computed Tomography}
+From \cite{gaocode}
+
+\paragraph{Compiling MEX Libraries}
+
+\begin{verbatim}
+mex -L"/usr/local/cuda/lib64" -lcudart -I"./" Ax_fan_mf.cpp Ax_fan_mf_cpu_siddon.cpp
+ Ax_fan_mf_cpu_new.cpp Ax_fan_mf_cpu_new_fb.cpp Ax_fan_mf_gpu_siddon.cu 
+ Ax_fan_mf_gpu_new.cu Ax_fan_mf_gpu_new_fb.cu find_area.cpp sort_alpha.cpp
+\end{verbatim}
+
+Possible error message about invalid conversion fron int to mxComplexity: change 
+
+\begin{verbatim}
+plhs[0]=mxCreateNumericMatrix(nx*ny*nt,1,mxSINGLE_CLASS,0);
+\end{verbatim} 
+
+to 
+
+\begin{verbatim}
+plhs[0]=mxCreateNumericMatrix(nx*ny*nt,1,mxSINGLE_CLASS,mxREAL);
+\end{verbatim}
+
+in any mex interface files
 
 \section{Another Section}
 
+
+\bibliographystyle{plain}
+\bibliography{/home/nick/Documents/research/bib}
 
 \end{document}
