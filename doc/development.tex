@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{fullpage}
-
+\usepackage{framelab}
 
 \title{FrameLab: Development Guide}
 \date{\today}
@@ -26,6 +26,37 @@ R(u) = \|Wu\|_1
 
 \section{Compute Kernels}
 
+\paragraph{Alternating Direction Method of Multipliers}
+Recall that ADMM is designed to solve problems of the sort 
+\begin{align}
+(x^*,y^*) : = \argmin_{x,y} F(x)+G(y)\quad \st\quad  Ax+By = b \tag{$\mathcal{P}$}
+\end{align} The approach is to consider the Augmented Lagrangian: 
+\begin{align*}
+\L_\rho(x,y,\lambda) : = F(x)+G(y) + \left\langle \lambda, Ax+By-b\right \rangle +\frac{\rho}{2}\|Ax+By-b\|_2^2
+\end{align*} We then consider the saddle point problem 
+\begin{align}
+(x^*,y^*,\lambda^*)_\rho = \argmin_{(x,y)}\argmax_\lambda \L_\rho(x,y,\lambda)\label{saddlept} 
+\end{align}  Since we are interested in the saddle point itself and not the value of the functionals, we may complete the square in the definition of $\L_\rho$ to obtain 
+\begin{align*}
+\eqref{saddlept} = \argmin_{(x,y)}\argmax_\lambda F(x) + G(y) +\frac{\rho}{2}\|Ax+By-(b-\lambda/\rho)\|_2^2
+\end{align*}For notational convenience, we define
+\begin{align*}
+\L_\rho^*(x,y,\lambda): =  F(x) + G(y) +\frac{\rho}{2}\|Ax+By-(b-\lambda/\rho)\|_2^2
+\end{align*}
+
+ If we then perform coordinate descent/ascent, we arrive at the 3-step ADMM scheme: 
+\begin{align*}
+\left\{\begin{array}{ll}
+x^{(k+1)} &= \argmin_x \L_\rho^*(x,y^{(k)},\lambda^{(k)}) \\
+y^{(k+1)} &= \argmin_y \L_\rho^*(x^{(k+1)},y,\lambda^{(k)})\\
+\lambda^{(k+1)} &= \argmax_\lambda \L_{\rho}^*(x^{(k+1)},y^{(k+1)},\lambda)
+\end{array}\right. 
+\end{align*} The method can be generalized in the particular case that $F(x)+G(y)$ is further separable, e.g. $F(x)+G(y) = F_1(x_1)+F_2(x_2)+\ldots+F_n(x_n)$, with $A\textbf{x}=\textbf{b}$, where $\textbf{x} = (x_1,\ldots,x_n)^T$.  The augmented Lagrangian then takes the form 
+\begin{align*}
+\L_\rho (\textbf{x},\Lambda) : = \sum F_i(x_i) + \left\langle \Lambda,A\textbf{x}-\textbf{b}\right\rangle +\frac{\rho}{2}\|A\textbf{x}-\textbf{b}\|_2^2 
+\end{align*} where $\Lambda = (\lambda_1,\ldots,\lambda_n)^T$. 
+
+In FrameLab, we have implemented an ADMM object designed to solve problems of the type $\mathcal{P}$.
 \section{Another Section}
 
 
