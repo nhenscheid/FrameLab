@@ -2,6 +2,11 @@
 \usepackage{fullpage}
 \usepackage{framelab}
 
+\usepackage{framelab}
+\usepackage{verbatim}
+
+
+
 \title{FrameLab: Development Guide}
 \date{\today}
 
@@ -25,6 +30,30 @@ R(u) = \|Wu\|_1
 
 
 \section{Compute Kernels}
+\subsection{Computed Tomography}
+From \cite{gaocode}
+
+\paragraph{Compiling MEX Libraries}
+
+\begin{verbatim}
+mex -L"/usr/local/cuda/lib64" -lcudart -I"./" Ax_fan_mf.cpp Ax_fan_mf_cpu_siddon.cpp
+ Ax_fan_mf_cpu_new.cpp Ax_fan_mf_cpu_new_fb.cpp Ax_fan_mf_gpu_siddon.cu 
+ Ax_fan_mf_gpu_new.cu Ax_fan_mf_gpu_new_fb.cu find_area.cpp sort_alpha.cpp
+\end{verbatim}
+
+Possible error message about invalid conversion fron int to mxComplexity: change 
+
+\begin{verbatim}
+plhs[0]=mxCreateNumericMatrix(nx*ny*nt,1,mxSINGLE_CLASS,0);
+\end{verbatim} 
+
+to 
+
+\begin{verbatim}
+plhs[0]=mxCreateNumericMatrix(nx*ny*nt,1,mxSINGLE_CLASS,mxREAL);
+\end{verbatim}
+
+in any mex interface files
 
 \paragraph{Alternating Direction Method of Multipliers}
 Recall that ADMM is designed to solve problems of the sort 
@@ -59,5 +88,8 @@ y^{(k+1)} &= \argmin_y \L_\rho^*(x^{(k+1)},y,\lambda^{(k)})\\
 In FrameLab, we have implemented an ADMM object designed to solve problems of the type $\mathcal{P}$.
 \section{Another Section}
 
+
+\bibliographystyle{plain}
+\bibliography{/home/nick/Documents/research/bib}
 
 \end{document}

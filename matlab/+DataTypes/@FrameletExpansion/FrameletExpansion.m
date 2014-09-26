@@ -40,6 +40,9 @@ classdef FrameletExpansion < handle
            u = sys.adjointTransform(obj.frameletArray);
        end
        
+       c = plus(a,b);
+           
+       
    end%Methods 
    
    methods(Static)
@@ -59,7 +62,6 @@ classdef FrameletExpansion < handle
                    %Throw some error
            end%Switch dim
        end%makeCellArray
-       
        
    end%Static methods
    
