@@ -1,0 +1,10 @@
+clear u cbct y;
+
+u = DataTypes.ObjectData(3,single(phantom3d(256)),[10,10,10]);
+cbct = Operators.ConeBeamScanner();
+y = cbct.apply(u);
+
+
+
+%y=reshape(y,[cbct.na cbct.nb cbct.nv]);
+%AtAu = cbct.applyAdjoint(y);

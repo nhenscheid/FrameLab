@@ -8,7 +8,6 @@ function setPara(this,object)
     this.para.SO = this.SO/scale; %Source-isocenter spacing
     this.para.OD = this.OD/scale; %Isocenter-detector plane spacing
     this.para.dy_det = this.dy_det/scale; %Detector pixel spacing
-    this.para.dz_det = this.dz_det/scale; %Detector pixel spacing
     this.para.y_os = this.y_os/this.para.dy_det;
    
     %***Object parameters***%
@@ -16,18 +15,18 @@ function setPara(this,object)
     this.para.scale = scale; %Object xy scaling factor to force dx=dy=1
     this.para.nx = uint32(N(1)); %Object array x-dim
     this.para.ny = uint32(N(2)); %Object array y-dim
-    this.para.nz = uint32(N(3)); %Object array z-dim
-    this.para.dz = single(object.Dx(3))/scale; %Object dz
     this.para.nt = uint32(1); %Number of time steps (set to 0 for now)
     
     %***Scan variables (derived from scanner params)
     this.para.sd_phi = single(2*pi/this.nv*(0:this.nv-1));
-    this.para.sd_z = single(zeros(1,this.nv))/scale;%for helical scan
-    this.para.y_det=single(((-this.na/2:this.na/2-1)+0.5)*this.dy_det+this.y_os)/scale;
-    this.para.z_det=single(((-this.nb/2:this.nb/2-1)+0.5)*this.dz_det)/scale;
+    this.para.y_det=single(((-this.nd/2:this.nd/2-1)+0.5)*this.dy_det+this.y_os)/scale;
     this.para.cos_phi = cos(this.para.sd_phi);
     this.para.sin_phi = sin(this.para.sd_phi);
-    
+    this.para.cos_det = [];
+    this.para.sin_det = [];
+    angle_det=atan2(this.para.y_det,this.SO+this.OD);
+    this.para.cos_det=cos(angle_det);
+    this.para.sin_det=sin(angle_det);
     
     %***Misc things***%
     nt = 1;
@@ -49,7 +48,8 @@ function setPara(this,object)
     this.para.id_Y = uint32(id_Y);
     this.para.Nv = uint32(Nv);
     this.para.tmp_size = uint32(tmp_size);
-    this.para.nv_block = uint32(4);
-    this.para.version = uint32(1);
+    %this.para.nv_block = uint32(4); %dont need this for 2d?
+    this.para.version = uint32(0); %Using Gao's algorithm
+    %this.para.GPU = uint32(0);
 
 end%setPara

@@ -95,12 +95,8 @@ classdef ObjectData < handle & matlab.mixin.Copyable %not sure why handle
             obj.dataArray = alpha*obj.dataArray;
         end
         
-        function c = plus(a,b)
-            %add two objectDatas and store the result in the first's dataArray
-            if((a.dim~=b.dim)||(max(a.L~=b.L)))
-                error('Either dimensions or sizes are wrong!')
-            end
-            c = DataTypes.ObjectData(a.dim,a.dataArray+b.dataArray,a.L);
+        function obj = plus(obj.obj2)
+            %add a 
         end
         
         function y = objdot(obj,obj2)
