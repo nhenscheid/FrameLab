@@ -13,6 +13,7 @@
 // The full source codes are available at https://sites.google.com/site/fastxraytransform
 
 #define ABS(a) (a>0?a:-(a))
+#include "mex.h"
 
 float find_l(float a,float b,float c,float x,float y)
 // A method for computing the intersecting length of a pixel with a infinitely-narrow beam
@@ -26,6 +27,8 @@ float find_l(float a,float b,float c,float x,float y)
     tmp=c-a*x-b*y;
     d=ABS(tmp);
 
+    //mexPrintf("%s%f\n","d=",d);
+    //mexPrintf("%s%f\n","dmax=",dmax);
     if(d<dmax)
     {   tmp=tmpx-tmpy;
         d0=ABS(tmp);
@@ -38,6 +41,5 @@ float find_l(float a,float b,float c,float x,float y)
         else
         {l=(dmax-d)/(a2*b2);}
     }
-
     return l;
 }

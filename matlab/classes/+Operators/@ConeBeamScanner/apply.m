@@ -19,5 +19,5 @@ function y=apply(this,object)
         y = Ax_cone_mf(X0,this.para);
     end
     
-    y = DataTypes.ConeBeamData(reshape(y,[this.na this.nb this.nv]),this.para,object.L,'default');
+    y = DataTypes.CTData('cone',reshape(y,[this.na this.nb this.nv]),this.para,object.L);
 end

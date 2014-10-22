@@ -8,7 +8,7 @@ function setPara(this,object)
     this.para.SO = this.SO/scale; %Source-isocenter spacing
     this.para.OD = this.OD/scale; %Isocenter-detector plane spacing
     this.para.dy_det = this.dy_det/scale; %Detector pixel spacing
-    this.para.y_os = this.y_os/this.para.dy_det;
+    this.para.y_os = single(0.0);
    
     %***Object parameters***%
     N = size(object.dataArray);
@@ -24,7 +24,7 @@ function setPara(this,object)
     this.para.sin_phi = sin(this.para.sd_phi);
     this.para.cos_det = [];
     this.para.sin_det = [];
-    angle_det=atan2(this.para.y_det,this.SO+this.OD);
+    angle_det=atan2(this.para.y_det,this.para.SO+this.para.OD);
     this.para.cos_det=cos(angle_det);
     this.para.sin_det=sin(angle_det);
     
@@ -47,9 +47,10 @@ function setPara(this,object)
     this.para.id_X = uint32(id_X);
     this.para.id_Y = uint32(id_Y);
     this.para.Nv = uint32(Nv);
+    this.para.nv = uint32(this.nv);
     this.para.tmp_size = uint32(tmp_size);
     %this.para.nv_block = uint32(4); %dont need this for 2d?
     this.para.version = uint32(0); %Using Gao's algorithm
-    %this.para.GPU = uint32(0);
+    
 
 end%setPara

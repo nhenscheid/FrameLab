@@ -1,6 +1,6 @@
-classdef ConeBeamData
+classdef CTData
     properties (SetAccess = private)
-        scanType; %spiral, circular, ?
+        scanType; %options are 'cone' and 'fan'
         para; %Parameter struct
         dataArray; %array of size [na nb nv] 
         L; %Object size 
@@ -9,9 +9,9 @@ classdef ConeBeamData
     
     methods
         %***Constructor***%
-        function obj = ConeBeamData(dataArray,para,L,scanType)
+        function obj = CTData(scanType,dataArray,para,L)
             if(nargin<4)
-               scanType = 'default'; 
+               scanType = 'fan'; 
             end
             obj.checkInputs(dataArray,para,scanType);
             if(nargin>0)
@@ -24,8 +24,14 @@ classdef ConeBeamData
             end
         end % Constructor
         
-        function plotData(this,n,m,offset)
-           plotphantom3D(this.dataArray,n,m,offset);
+        function plotData3D(this,n,m,offset)
+            validatestring(this.scanType,{'cone'});
+            plotphantom3D(this.dataArray,n,m,offset);
+        end
+        
+        function plotData(this)
+            validatestring(this.scanType,{'fan'});
+            imshow(this.dataArray,[]);
         end
     end
     

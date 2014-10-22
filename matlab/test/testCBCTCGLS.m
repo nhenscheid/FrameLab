@@ -1,13 +1,13 @@
 % Testing Cone Beam reconstruction with cgls
 clear all;
 
-lam = 0.001;
+lam = 0.1;
 
 
 
 u = DataTypes.ObjectData(3,single(phantom3d(128)),[10,10,10]);
-cbct = Operators.ConeBeamScanner(256,256,64);
-A = @(x)cbct.applyAdjoint(cbct.apply(x))+lam*x;
+cbct = Operators.ConeBeamScanner(256,256,32);
+A = @(x)(cbct.applyAdjoint(cbct.apply(x))+lam*x);
 f0 = cbct.apply(u);
 
 rhs = cbct.applyAdjoint(f0); 

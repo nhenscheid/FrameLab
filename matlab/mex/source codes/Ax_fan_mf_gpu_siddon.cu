@@ -13,7 +13,7 @@
 // The full source codes are available at https://sites.google.com/site/fastxraytransform
 
 #include <math.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include "sort_alpha_d.h"
 
 #define BLOCK_SIZE_x 16

@@ -13,6 +13,7 @@
 // The full source codes are available at https://sites.google.com/site/fastxraytransform
 
 #include <math.h>
+#include "mex.h"
 #include "find_l.h"
 #define MAX(a,b) (a>b?a:b)
 #define MIN(a,b) (a<b?a:b)
@@ -32,7 +33,7 @@ void Atx_fan_mf_cpu_new(float *x,float *Y,float SO,float OD,float scale,int nx,i
     n=nx*ny;
 
     for(iy=0;iy<ny;iy++)
-    {   yc=(float)(iy+0.5-ny2);
+    {yc=(float)(iy+0.5-ny2);
         for(ix=0;ix<nx;ix++)
         {   xc=(float)(ix+0.5-nx2);
             for(it=0;it<nt;it++)
@@ -40,7 +41,6 @@ void Atx_fan_mf_cpu_new(float *x,float *Y,float SO,float OD,float scale,int nx,i
                 for(j=0;j<Nv[it];j++)
                 {   iv=id_Y[it*tmp_size+j];
                     y=&Y[iv*nd];
-
                     xr=cos_phi[iv]*xc+sin_phi[iv]*yc;
                     yr=-sin_phi[iv]*xc+cos_phi[iv]*yc;
                     tmp=SD/((xr+SO)*dy_det);
@@ -51,6 +51,7 @@ void Atx_fan_mf_cpu_new(float *x,float *Y,float SO,float OD,float scale,int nx,i
                         Py=cos_det[id]*cos_phi[iv]-sin_det[id]*sin_phi[iv];
                         Pd=SO*sin_det[id];
                         l=find_l(Px,Py,Pd,xc,yc);
+                        //mexPrintf("%e\n",l);
                         if(l>0)
                         {x[it*n+iy*nx+ix]+=l*y[id];}
                     }
