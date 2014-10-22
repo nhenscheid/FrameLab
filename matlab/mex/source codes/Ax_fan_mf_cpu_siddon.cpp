@@ -13,7 +13,7 @@
 // The full source codes are available at https://sites.google.com/site/fastxraytransform
 
 #include <math.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include "sort_alpha.h"
 
 void Ax_fan_mf_cpu_siddon(float *X,float *y,float SO,float OD,float scale,int nx,int ny,int nv,float *sd_phi,int nd,float *y_det,int *id_X)

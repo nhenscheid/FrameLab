@@ -17,5 +17,5 @@ function checkInputs(this,X0)
     validateattributes(this.para.tmp_size,{'uint32'},{});
     validateattributes(this.para.version,{'uint32'},{});
     validateattributes(this.para.GPU,{'uint32'},{});
-    validateattributes(X0,{'single'},{'size',[this.para.nx*this.para.ny,1]});
+    validateattributes(X0,{'single'},{});
 end

@@ -1,5 +1,6 @@
 function y=applyAdjoint(this,object)
-    %***Apply adjoint cone beam operator to an object of time ConeBeamData
+    %***Apply adjoint cone beam operator to an object of type
+    %CTData('cone')
     
     if(isempty(fieldnames(this.para)))
         this.para = object.para; %If the scanner's parameters aren't set,import para from the object

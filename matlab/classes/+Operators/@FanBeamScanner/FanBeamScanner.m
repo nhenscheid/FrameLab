@@ -10,6 +10,10 @@ classdef FanBeamScanner < handle
         y_os = single(0.0);
     end
     
+    properties
+        verbose = false; %To display diagnostic messages
+    end
+    
     
     methods
         %***Constructor***%
@@ -25,7 +29,7 @@ classdef FanBeamScanner < handle
         y = apply(this,object)
         
         %***Adjoint (Backprojection)***%
-        y = applyAdjoint(this,object)
+        Aty = applyAdjoint(this,object)
     end %Methods 
     
     methods (Static = true)
