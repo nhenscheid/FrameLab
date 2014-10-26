@@ -6,8 +6,8 @@ fbct = Operators.FanBeamScanner(256,64);
 A = @(x)fbct.apply(x);
 At = @(x)fbct.applyAdjoint(x);
 u0 = DataTypes.ObjectData(2,single(zeros(256)),[10,10]);
-cgiter = 10;
-cgtol = 1e-10;
+cgiter = 500;
+cgtol = 1e-14;
 
 %% Noise free version
 u = DataTypes.ObjectData(2,single(phantom(256)),[10,10]);

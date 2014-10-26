@@ -27,9 +27,11 @@ classdef CGLS
                 obj.u0 = u0;
                 obj.At = At;
                 obj.lam = lam;
-                if nargin>=6
+                if nargin==6
                     obj.globalIter = globalIter;
+                    obj.convergenceTol = 1e-14;
                 elseif nargin==7
+                    obj.globalIter = globalIter;
                     obj.convergenceTol = convergenceTol;
                 else
                     obj.globalIter = 500; %Prob too big
