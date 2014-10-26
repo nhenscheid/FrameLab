@@ -50,7 +50,7 @@ function setPara(this,object)
     this.para.nv = uint32(this.nv);
     this.para.tmp_size = uint32(tmp_size);
     %this.para.nv_block = uint32(4); %dont need this for 2d?
-    this.para.version = uint32(0); %Using Gao's algorithm
+    this.para.version = uint32(1); %
     
 
 end%setPara
