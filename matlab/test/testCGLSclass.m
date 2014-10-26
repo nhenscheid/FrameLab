@@ -42,3 +42,28 @@ y = solver.solveCGLS();
 
 figure('Name',['Noisy reconstruction with sigma = ',num2str(sigma)]);
 imshow(y.dataArray,[]);
+
+%% Test cone beam reconstruction using CGLS
+
+lam = 0.5;
+cbct = Operators.ConeBeamScanner(256,256,60);
+A = @(x)cbct.apply(x);
+At = @(x)cbct.applyAdjoint(x);
+u3d = DataTypes.ObjectData(3,single(phantom3d(256)),[10,10,10]);
+u03d = DataTypes.ObjectData(3,single(zeros(256,256,256)),[10,10,10]);
+cgiter = 10;
+cgtol = 1e-14;
+
+f03d = A(u3d);
+
+solver = Optimizers.CGLS(A,At,f03d,u03d,lam,cgiter,cgtol);
+
+disp('Solving a noise free cone beam reconstruction using CGLS');
+disp('Scanner settings: ');
+disp(cbct.para);
+disp('Optimization settings: ');
+disp(solver);
+
+y3d = solver.solveCGLS();
+
+
