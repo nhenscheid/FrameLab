@@ -9,7 +9,7 @@ CUDALIB = '/usr/local/cuda/lib64';
 arch=computer;
 mac=strcmp(arch,'MACI64') || strcmp(arch,'MACI') || strcmp(arch,'MAC');
 linux=strcmp(arch,'GLNXA64') || strcmp(arch,'GLNX86');
-GPU = sign(gpuDeviceCount); % To compile with gpu or not
+GPU = sign(gpuDeviceCount) % To compile with gpu or not
 if mac
     mexext = '.mexmaci64'; % Assuming 64 bit.
 end
@@ -58,6 +58,7 @@ CPUFLAGS = '-v -I"./"';
 switch GPU
     case 1
         % Compile binaries for CPU/GPU
+        disp('Compiling for CPU/GPU');
         for i=1:length(bins)
             str = eval(bins{i});
             str = [GPUFLAGS,str];
@@ -71,6 +72,7 @@ switch GPU
     case 0
         % Compile binaries for CPU only 
         for i=1:length(bins)
+            disp('Compiling for CPU only');
             str = eval(bins{i});
             str = [CPUFLAGS,str];
             args = regexp(str, '\s+', 'split');

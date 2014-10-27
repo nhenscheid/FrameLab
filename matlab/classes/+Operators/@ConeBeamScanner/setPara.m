@@ -22,7 +22,8 @@ function setPara(this,object)
     
     %***Scan variables (derived from scanner params)
     this.para.sd_phi = single(2*pi/this.nv*(0:this.nv-1));
-    this.para.sd_z = single(zeros(1,this.nv))/scale;%for helical scan
+    this.para.sd_z = single(linspace(0,5,this.nv))/scale;
+    %this.para.sd_z = single(zeros(1,this.nv))/scale;%for helical scan
     this.para.y_det=single(((-this.na/2:this.na/2-1)+0.5)*this.dy_det+this.y_os)/scale;
     this.para.z_det=single(((-this.nb/2:this.nb/2-1)+0.5)*this.dz_det)/scale;
     this.para.cos_phi = cos(this.para.sd_phi);
