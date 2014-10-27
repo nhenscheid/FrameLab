@@ -45,8 +45,8 @@ imshow(y.dataArray,[]);
 
 %% Test cone beam reconstruction using CGLS
 
-lam = 0.5;
-cbct = Operators.ConeBeamScanner(256,256,60);
+lam = 1;
+cbct = Operators.ConeBeamScanner(256,256,32);
 A = @(x)cbct.apply(x);
 At = @(x)cbct.applyAdjoint(x);
 u3d = DataTypes.ObjectData(3,single(phantom3d(256)),[10,10,10]);
