@@ -14,6 +14,7 @@
 
 #include <math.h>
 #include <malloc.h>
+#include "mex.h"
 #include "find_l_3d_d.h"
 #define MAX(a,b) (a>b?a:b)
 #define MIN(a,b) (a<b?a:b)
@@ -114,7 +115,9 @@ float SO,float OD,float scale,float dy_det,float y_os,float dz_det,float dz,int 
 // A new method for computing the adjoint X-ray transform (infinitely-narrow beam)
 // The algorithm details are available in
 // H. Gao. "Fast parallel algorithms for the X-ray transform and its adjoint", Medical Physics (2012).
-{   float *x_d,*y_d,*sd_z_d,*y_det_d,*z_det_d,*cos_phi_d,*sin_phi_d;
+{   
+    mexPrintf("Hello from inside Atx_cone_mf_gpu_new.cu \n");
+    float *x_d,*y_d,*sd_z_d,*y_det_d,*z_det_d,*cos_phi_d,*sin_phi_d;
 	int *id_Y_d,nd,N,id,v0,it,i,n,nv2;
 
 	N=nx*ny*nz;

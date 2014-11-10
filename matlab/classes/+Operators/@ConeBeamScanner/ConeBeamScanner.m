@@ -4,18 +4,21 @@ classdef ConeBeamScanner < handle
         na = 256;
         nb = 256;
         nv = 128;
-        SO = single(54.1);%Source to isocenter
-        OD = single(40.8);%Detector to isocenter
-        dy_det =single(0.15/2); %Detector spacing  (!!!NEED DEFAULT VALUE!!!)
-        dz_det =single(0.15/2); %Detector spacing  (!!!NEED DEFAULT VALUE!!!)
+        SO = single(5.0);%Source to isocenter
+        OD = single(5.0);%Detector to isocenter
+        Ly = single(6.0); % Width of detector panel
+        Lz = single(6.0); % Height of detector panel
+        %dy_det =single(0.15/2); %Detector spacing  
+        %dz_det =single(0.15/2); %Detector spacing  
+        %(dy_det, dz_det disabled: replaced by detector width and height.)
         para = struct; %struct of parameters to pass to Gao's methods
         y_os = single(0.0);
     end
     
     properties
         verbose = false; %To display diagnostic messages
+        GPU = 1;  % Set to 0 to force using CPU
     end
-    
     
     methods
         %***Constructor***%

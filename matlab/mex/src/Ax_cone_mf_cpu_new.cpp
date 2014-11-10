@@ -28,7 +28,9 @@ void Ax_cone_mf_cpu_new(float *X,float *y,float SO,float OD,float scale,int nx,i
     nd=na*nb;
 
     for(iv=0;iv<nv;iv++)
-    {   x=&X[id_X[iv]*n];
+    {   
+        mexPrintf("%s%i\n","iv = ", iv);
+        x=&X[id_X[iv]*n];
         cos_phi=(float)cos(sd_phi[iv]);sin_phi=(float)sin(sd_phi[iv]);
         x1=cos_phi*(-SO);
         y1=sin_phi*(-SO);
