@@ -12,19 +12,19 @@ function y=applyAdjoint(this,object)
     end
 
     X0 = object.dataArray(:);
-    if gpuDeviceCount==0
+    if (gpuDeviceCount==0 || this.GPU==0)
         this.para.GPU = uint32(0);
         this.checkInputs(X0);
         if(this.verbose)
-            disp('Computing forward cone beam transform with CPU');
+            disp('Computing adjoint cone beam transform with CPU');
             this.para
         end
         y = Atx_cone_mf(X0,this.para);
-    elseif gpuDeviceCount>0
+    elseif (gpuDeviceCount>0 && this.GPU ==1)
         this.para.GPU = uint32(1);
         this.checkInputs(X0);
         if(this.verbose)
-            disp('Computing forward cone beam transform with GPU');
+            disp('Computing adjoint cone beam transform with GPU');
             this.para
         end
         y = Atx_cone_mf(X0,this.para);

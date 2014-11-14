@@ -7,8 +7,10 @@ function setPara(this,object)
     %%%%Scanner parameters***%
     this.para.SO = this.SO/scale; %Source-isocenter spacing
     this.para.OD = this.OD/scale; %Isocenter-detector plane spacing
-    this.para.dy_det = this.dy_det/scale; %Detector pixel spacing
-    this.para.dz_det = this.dz_det/scale; %Detector pixel spacing
+    dy_det = this.Ly/this.na; %Detector pixel spacing
+    dz_det = this.Lz/this.nb; %Detector pixel spacing
+    this.para.dy_det = dy_det/scale;
+    this.para.dz_det = dz_det/scale;
     this.para.y_os = this.y_os/this.para.dy_det;
    
     %***Object parameters***%
@@ -22,9 +24,10 @@ function setPara(this,object)
     
     %***Scan variables (derived from scanner params)
     this.para.sd_phi = single(2*pi/this.nv*(0:this.nv-1));
+    %this.para.sd_z = single(linspace(0,1,this.nv))/scale;
     this.para.sd_z = single(zeros(1,this.nv))/scale;%for helical scan
-    this.para.y_det=single(((-this.na/2:this.na/2-1)+0.5)*this.dy_det+this.y_os)/scale;
-    this.para.z_det=single(((-this.nb/2:this.nb/2-1)+0.5)*this.dz_det)/scale;
+    this.para.y_det=single(((-this.na/2:this.na/2-1)+0.5)*dy_det+this.y_os)/scale;
+    this.para.z_det=single(((-this.nb/2:this.nb/2-1)+0.5)*dz_det)/scale;
     this.para.cos_phi = cos(this.para.sd_phi);
     this.para.sin_phi = sin(this.para.sd_phi);
     
@@ -50,6 +53,6 @@ function setPara(this,object)
     this.para.Nv = uint32(Nv);
     this.para.tmp_size = uint32(tmp_size);
     this.para.nv_block = uint32(4);
-    this.para.version = uint32(1);
+    this.para.version = uint32(1);  % 1 = Gao, 0 = Siddon
 
 end%setPara

@@ -1,7 +1,7 @@
 function y=apply(this,object)
     this.setPara(object); %set the Gao parameter struct
     X0 = object.dataArray(:);
-    if gpuDeviceCount==0
+    if (gpuDeviceCount==0 || this.GPU == 0)
         this.para.GPU = uint32(0);
         this.checkInputs(X0);
         if(this.verbose)
@@ -9,7 +9,7 @@ function y=apply(this,object)
             this.para
         end
         y = Ax_cone_mf(X0,this.para);
-    elseif gpuDeviceCount>0
+    elseif (gpuDeviceCount>0 && this.GPU ==1)
         this.para.GPU = uint32(1);
         this.checkInputs(X0);
         if(this.verbose)
