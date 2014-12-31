@@ -1,6 +1,7 @@
 classdef ConeBeamScanner < handle
     properties (SetAccess = private)
-        scanType = '3DCone'; %Support for other geometries later
+        scanningGeometry = 'circle'; %Support for other geometries later
+        
         na = 256;
         nb = 256;
         nv = 128;
