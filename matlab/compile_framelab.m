@@ -26,7 +26,7 @@ switch GPU
     case 0
         %bins = {'Ax_fan_mf_cpu','Atx_fan_mf_cpu','Ax_cone_mf_cpu',...
         %        'Atx_cone_mf_cpu'};
-        bins = {'Ax_cone_mf_cpu'};
+        bins = {'Ax_cone_mf_cpu','Atx_cone_mf_cpu'};
 end
 
 
