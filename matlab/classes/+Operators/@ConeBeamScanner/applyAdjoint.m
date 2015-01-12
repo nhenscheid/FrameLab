@@ -11,7 +11,8 @@ function y=applyAdjoint(this,object)
         end
     end
 
-    X0 = object.dataArray(:);
+    %X0 = object.dataArray(:);  I think the adjoint wants the full array?
+    X0 = object.dataArray;
     if (gpuDeviceCount==0 || this.GPU==0)
         this.para.GPU = uint32(0);
         this.checkInputs(X0);

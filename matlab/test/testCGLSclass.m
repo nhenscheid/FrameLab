@@ -1,7 +1,7 @@
 %Testing Fan Beam reconstruction with cgls
 clc;clear all;close all;
 
-lam = 1;
+lam = 5;
 fbct = Operators.FanBeamScanner(256,64);
 A = @(x)fbct.apply(x);
 At = @(x)fbct.applyAdjoint(x);
@@ -12,7 +12,8 @@ cgtol = 1e-14;
 %% Noise free version
 u = DataTypes.ObjectData(2,single(phantom(256)),[10,10]);
 f0 = fbct.apply(u);
-solver = Optimizers.CGLS(A,At,f0,u0,lam,cgiter,cgtol);
+b = At(f0);
+solver = Optimizers.CGLS(A,At,b,u0,lam,cgiter,cgtol);
 
 disp('Solving a fan beam reconstruction problem using CGLS - noise free');
 disp('Scanner settings: ');
@@ -29,7 +30,8 @@ imshow(y.dataArray,[]);
 sigma = 0.2;
 u = DataTypes.ObjectData(2,single(phantom(256))+single(sigma*randn(256)),[10,10]);
 f0 = fbct.apply(u);
-solver = Optimizers.CGLS(A,At,f0,u0,lam,cgiter,cgtol);
+b = At(f0);
+solver = Optimizers.CGLS(A,At,b,u0,lam,cgiter,cgtol);
 
 disp('Solving a fan beam reconstruction problem using CGLS');
 disp(['Noise level sigma = ',num2str(sigma)]);
@@ -45,18 +47,31 @@ imshow(y.dataArray,[]);
 
 %% Test cone beam reconstruction using CGLS
 
-lam = 10;
-cbct = Operators.ConeBeamScanner(64,64,64);
+% <<<<<<< HEAD
+% lam = 10;
+% cbct = Operators.ConeBeamScanner(64,64,64);
+% A = @(x)cbct.apply(x);
+% At = @(x)cbct.applyAdjoint(x);
+% u3d = DataTypes.ObjectData(3,single(phantom3d(64)),[10,10,10]);
+% u03d = DataTypes.ObjectData(3,single(zeros(64,64,64)),[10,10,10]);
+% =======
+lam = 1;
+%cbct = Operators.ConeBeamScanner('circle',64,64,64);
+cbct = Operators.ConeBeamScanner('helix',128,128,[],2,2,0.5,32);
 A = @(x)cbct.apply(x);
 At = @(x)cbct.applyAdjoint(x);
-u3d = DataTypes.ObjectData(3,single(phantom3d(64)),[10,10,10]);
-u03d = DataTypes.ObjectData(3,single(zeros(64,64,64)),[10,10,10]);
+u3d = DataTypes.ObjectData(3,single(phantom3d(64)),[2,2,2]);
+u03d = DataTypes.ObjectData(3,single(zeros(64,64,64)),[2,2,2]);
+>>>>>>> c76969b53dc984f71ac2a68a3e04d7bf598778c2
 cgiter = 100;
 cgtol = 1e-14;
 
 f03d = A(u3d);
+sigma = 0.01;
+f03d = f03d+sigma*randn(cbct.na,cbct.nb,cbct.nv);
+b = At(f03d);
 
-solver = Optimizers.CGLS(A,At,f03d,u03d,lam,cgiter,cgtol);
+solver = Optimizers.CGLS(A,At,b,u03d,lam,cgiter,cgtol);
 
 disp('Solving a noise free cone beam reconstruction using CGLS');
 disp('Scanner settings: ');
@@ -65,5 +80,7 @@ disp('Optimization settings: ');
 disp(solver);
 
 y3d = solver.solveCGLS();
+
+
 
 

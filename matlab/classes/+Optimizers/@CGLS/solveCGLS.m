@@ -4,10 +4,10 @@ function y = solveCGLS(obj)
 % - Input checks/warnings/etc
 % - error update/verbose mode
     lam = obj.lam;
-    A = @(x)(obj.At(obj.A(x))+lam*x);
-    rhs = obj.At(obj.b);
-    rk = rhs;
-    pk = rhs;
+    A_loc = @(x)(obj.At(obj.A(x))+lam*x);
+    %rhs = obj.At(obj.b);
+    rk = A_loc(obj.u0)-obj.b;
+    pk = -rk;
     uk = obj.u0;
     gammaold = rk.objdot(rk); %object rk must have dot product method
     icg = 0;
@@ -16,13 +16,13 @@ function y = solveCGLS(obj)
     % Main conjugate gradient loop
     while icg<cgiter
         icg = icg+1;
-        qk = A(pk);
+        qk = A_loc(pk);
         alphak = gammaold/(pk.objdot(qk));
         uk = uk + alphak*pk;
-        rk = rk + (-alphak*qk);
+        rk = rk + alphak*qk;
         gammanew = rk.objdot(rk)
         betak = gammanew/gammaold;
-        pk = rk + betak*pk;
+        pk = -rk + betak*pk;
         gammaold = gammanew;
         if(gammaold<cgtol)
             icg = cgiter;

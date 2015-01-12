@@ -1,4 +1,5 @@
-classdef FrameletExpansion < handle
+classdef FrameletExpansion
+%classdef FrameletExpansion < handle & matlab.mixin.Copyable
    properties (SetAccess = private)
       dim = 3;
       frameletType = 'haar';
@@ -40,8 +41,10 @@ classdef FrameletExpansion < handle
            u = sys.adjointTransform(obj.frameletArray);
        end
        
+       % Operators
        c = plus(a,b);
-           
+       c = minus(a,b);
+       c = mtimes(a,b);    
        
    end%Methods 
    

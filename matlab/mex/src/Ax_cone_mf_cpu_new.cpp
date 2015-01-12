@@ -30,6 +30,9 @@ void Ax_cone_mf_cpu_new(float *X,float *y,float SO,float OD,float scale,int nx,i
     for(iv=0;iv<nv;iv++)
     {   
         mexPrintf("%s%i\n","iv = ", iv);
+        mexPrintf("%s%f\n","x1 = ",x1);
+        mexPrintf("%s%f\n","y1 = ",y1);
+        mexPrintf("%s%f\n","z1 = ",z1);
         x=&X[id_X[iv]*n];
         cos_phi=(float)cos(sd_phi[iv]);sin_phi=(float)sin(sd_phi[iv]);
         x1=cos_phi*(-SO);
@@ -40,12 +43,12 @@ void Ax_cone_mf_cpu_new(float *X,float *y,float SO,float OD,float scale,int nx,i
             {   x2=cos_phi*OD-sin_phi*y_det[ia];
                 y2=sin_phi*OD+cos_phi*y_det[ia];
                 z2=z_det[ib]+sd_z[iv];
-                mexPrintf("%s%f\n","x1 = ",x1);
-                mexPrintf("%s%f\n","y1 = ",y1);
-                mexPrintf("%s%f\n","z1 = ",z1);
-                mexPrintf("%s%f\n","x2 = ",x2);
-                mexPrintf("%s%f\n","y2 = ",y2);
-                mexPrintf("%s%f\n","z2 = ",z2);
+                //mexPrintf("%s%f\n","x1 = ",x1);
+                //mexPrintf("%s%f\n","y1 = ",y1);
+                //mexPrintf("%s%f\n","z1 = ",z1);
+                //mexPrintf("%s%f\n","x2 = ",x2);
+                //mexPrintf("%s%f\n","y2 = ",y2);
+                //mexPrintf("%s%f\n","z2 = ",z2);
                 id=ib*na+ia;
                 y[iv*nd+id]=0;
                 // assuming z1-z2 is small
