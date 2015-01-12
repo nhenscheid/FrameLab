@@ -40,13 +40,13 @@ float SO,float OD,float scale,float dy_det,float y_os,float dz_det,float dz,int 
 
     if(ix<nx&&iy2<ny*nz)
     {   int nx2,ny2,nz2,na2,nb2,iv0,iv,ia,ib,iy,iz,na_min,na_max,nb_min,nb_max,idx;
-		float xc,yc,zc,xr,yr,SD,l,tmp,x1,y1,z1,x2,y2,z2,d;
+		float xc,yc,zc,xr,yr,zr,SD,l,tmp,x1,y1,z1,x2,y2,z2,d;
 
 		SD=SO+OD;
 		na2=na/2;nb2=nb/2;
 		nx2=nx/2;ny2=ny/2;nz2=nz/2;
 		d=(float)sqrt((1+dz*dz)/2);
-
+        
 		iz=(int)floor((float)iy2/(float)ny);
 		iy=iy2-iz*ny;
 		idx=iz*ny*nx+iy*nx+ix;
@@ -59,14 +59,15 @@ float SO,float OD,float scale,float dy_det,float y_os,float dz_det,float dz,int 
         {   iv=id_Y[iv0];
             xr=cos_phi[iv]*xc+sin_phi[iv]*yc;
             yr=-sin_phi[iv]*xc+cos_phi[iv]*yc;
+            zr=zc-sd_z[iv];
 
             tmp=SD/((xr+SO)*dy_det);
-            na_max=(int)floor((yr+1)*tmp-y_os+na2);
+            na_max=(int)ceil((yr+1)*tmp-y_os+na2);
             na_min=(int)floor((yr-1)*tmp-y_os+na2);
 
             tmp=SD/((xr+SO)*dz_det);
-            nb_max=(int)floor((zc+d)*tmp+nb2);
-            nb_min=(int)floor((zc-d)*tmp+nb2);
+            nb_max=(int)ceil((zr+d)*tmp+nb2);
+            nb_min=(int)floor((zr-d)*tmp+nb2);
 
             for(ib=MAX(0,nb_min);ib<=MIN(nb_max,nb-1);ib++)
             {   for(ia=MAX(0,na_min);ia<=MIN(na_max,na-1);ia++)
@@ -116,7 +117,8 @@ float SO,float OD,float scale,float dy_det,float y_os,float dz_det,float dz,int 
 // The algorithm details are available in
 // H. Gao. "Fast parallel algorithms for the X-ray transform and its adjoint", Medical Physics (2012).
 {   
-    mexPrintf("Hello from inside Atx_cone_mf_gpu_new.cu \n");
+    //mexPrintf("Hello from inside Atx_cone_mf_gpu_new.cu \n");
+    mexPrintf("dz=%f\n",dz);
     float *x_d,*y_d,*sd_z_d,*y_det_d,*z_det_d,*cos_phi_d,*sin_phi_d;
 	int *id_Y_d,nd,N,id,v0,it,i,n,nv2;
 

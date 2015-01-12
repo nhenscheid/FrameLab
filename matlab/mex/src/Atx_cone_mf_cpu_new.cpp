@@ -34,7 +34,7 @@ float dy_det,float y_os,float dz_det,float dz,int nt,int *id_Y,int *Nv,int tmp_s
     nx2=nx/2;ny2=ny/2;nz2=nz/2;
     n=nx*ny*nz;
     nd=na*nb;
-    d=(float)sqrt((1+dz*dz)/2);
+    d=(float)sqrt(1+dz*dz/2); //???? What should this be? 
 
     for(iz=0;iz<nz;iz++)
     {   zc=(float)(iz+0.5-nz2)*dz;
@@ -71,7 +71,8 @@ float dy_det,float y_os,float dz_det,float dz,int nt,int *id_Y,int *Nv,int tmp_s
                                 y2=sin_phi[iv]*OD+cos_phi[iv]*y_det[ia];
                                 z2=z_det[ib]+sd_z[iv];
 
-                                l=find_l_3d(x1,y1,z1,x2,y2,z2,1.0,1.0,dz,xc,yc,zc);
+                                //l=find_l_3d(x1,y1,z1,x2,y2,z2,1.0,1.0,dz,xc,yc,zc);
+                                l=find_l_3d(x1,y1,z1,x2,y2,z2,1.0,1.0,1.0,xc,yc,zc);
                                 x[it*n+idx]+=l*y[id];
                             }
                         }

@@ -20,12 +20,26 @@ function setPara(this,object)
     this.para.ny = uint32(N(2)); %Object array y-dim
     this.para.nz = uint32(N(3)); %Object array z-dim
     this.para.dz = single(object.Dx(3))/scale; %Object dz
-    this.para.nt = uint32(1); %Number of time steps (set to 0 for now)
+    this.para.nt = uint32(1); %Number of time steps (set to 1 for now)
     
     %***Scan variables (derived from scanner params)
-    this.para.sd_phi = single(2*pi/this.nv*(0:this.nv-1));
-    %this.para.sd_z = single(linspace(0,1,this.nv))/scale;
-    this.para.sd_z = single(zeros(1,this.nv))/scale;%for helical scan
+    if strcmp(this.type,'circle')
+        this.para.sd_phi = single(2*pi/this.nv*(0:this.nv-1));
+        this.para.sd_z = single(zeros(1,this.nv))/scale;
+    elseif strcmp(this.type,'helix')
+        phiMax = this.rps*this.zmax*2*pi/this.vtab;
+        dphi = 2*pi*this.rps/this.fps;
+        this.para.sd_phi = single(0:dphi:phiMax);
+        h = this.vtab/(2*pi*this.rps);
+        this.para.sd_z = single(h*this.para.sd_phi)/scale;
+    elseif strcmp(this.type,'doubleHelix')
+        phiMax = this.rps*this.zmax*2*pi/this.vtab;
+        dphi = 2*pi*this.rps/this.fps;
+        this.para.sd_phi = [single(0:dphi:phiMax),single((0:dphi:phiMax)+this.phaseShift)]; % second helix is phase shifted
+        h = this.vtab/(2*pi*this.rps);
+        this.para.sd_z = [single(h*(0:dphi:phiMax))/scale,single(h*(0:dphi:phiMax))/scale]; % same z-coords for both
+    end
+    
     this.para.y_det=single(((-this.na/2:this.na/2-1)+0.5)*dy_det+this.y_os)/scale;
     this.para.z_det=single(((-this.nb/2:this.nb/2-1)+0.5)*dz_det)/scale;
     this.para.cos_phi = cos(this.para.sd_phi);
@@ -51,6 +65,8 @@ function setPara(this,object)
     this.para.id_X = uint32(id_X);
     this.para.id_Y = uint32(id_Y);
     this.para.Nv = uint32(Nv);
+    
+    
     this.para.tmp_size = uint32(tmp_size);
     this.para.nv_block = uint32(4);
     this.para.version = uint32(1);  % 1 = Gao, 0 = Siddon
