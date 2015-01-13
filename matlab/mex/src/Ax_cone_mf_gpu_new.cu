@@ -19,10 +19,10 @@
 #define BLOCK_SIZE_x 16
 #define BLOCK_SIZE_y 16
 
-extern "C" void Ax_cone_mf_gpu_new(float *X,float *y,float *sd_phi,float *sd_z,float *y_det,float *z_det,int *id_Y,int *Nv,
+extern "C" void Ax_cone_mf_gpu_new(float *X,float *y,float *yNorm,float *sd_phi,float *sd_z,float *y_det,float *z_det,int *id_Y,int *Nv,
 float SO,float OD,float scale,float dz,int nx,int ny,int nz,int nt,int na,int nb,int nv,int tmp_size,int nv_block);
 
-__global__ void Ax_cone_mf_gpu_kernel_new(float *x,float *y,float *sd_phi,float *sd_z,float *y_det,float *z_det,int *id_Y,
+__global__ void Ax_cone_mf_gpu_kernel_new(float *x,float *y,float *yNorm,float *sd_phi,float *sd_z,float *y_det,float *z_det,int *id_Y,
 float SO,float OD,float scale,float dz,int nx,int ny,int nz,int na,int nb,int nv2)
 // Please note that this version has O(Nx) per thread, since GPU threads are already saturated.
 // O(1) per thread can be achieved by parallelizing the "for" loop here, given sufficient number of GPU threads.
@@ -38,7 +38,7 @@ float SO,float OD,float scale,float dz,int nx,int ny,int nz,int na,int nb,int nv
     if(ia<na&&ib2<nb*nv2)
     {
 		int nd,nx2,ny2,nz2,iv0,iv,ib,id,ix,iy,iz,cx1,cx2,cy1,cy2,cz1,cz2;
-		float cos_phi,sin_phi,x1,y1,x2,y2,z1,z2,xx1,yy1,zz1,xx2,yy2,zz2,slope1,slope2,l,d,tmp,rx,ry,rz;
+		float norm,cos_phi,sin_phi,x1,y1,x2,y2,z1,z2,xx1,yy1,zz1,xx2,yy2,zz2,slope1,slope2,l,d,tmp,rx,ry,rz;
 
 		nx2=nx/2;ny2=ny/2;nz2=nz/2;
 		nd=na*nb;
@@ -55,6 +55,7 @@ float SO,float OD,float scale,float dz,int nx,int ny,int nz,int na,int nb,int nv
 		x2=cos_phi*OD-sin_phi*y_det[ia];
         y2=sin_phi*OD+cos_phi*y_det[ia];
 		z2=z_det[ib]+sd_z[iv];
+        norm = sqrt(pow(x1-x2,2)+pow(y1-y2,2)+pow(z1-z2,2))*scale;
 
 		y[id]=0;
         // assuming z1-z2 is small
@@ -461,10 +462,11 @@ float SO,float OD,float scale,float dz,int nx,int ny,int nz,int na,int nb,int nv
             }
         }
         y[id]*=scale;
+        yNorm[id] = y[id]/norm;
     }
 }
 
-void Ax_cone_mf_gpu_new(float *X,float *y,float *sd_phi,float *sd_z,float *y_det,float *z_det,int *id_Y,int *Nv,
+void Ax_cone_mf_gpu_new(float *X,float *y,float *yNorm,float *sd_phi,float *sd_z,float *y_det,float *z_det,int *id_Y,int *Nv,
 float SO,float OD,float scale,float dz,int nx,int ny,int nz,int nt,int na,int nb,int nv,int tmp_size,int nv_block)
 //assuming dx=dy; during the computation, dx=dy=1; after the computation, the "dx=dy=scale" is taken into account.
 //the input can be multiple 3D images, e.g., temporally-resolved images from 4DCT.
@@ -472,20 +474,26 @@ float SO,float OD,float scale,float dz,int nx,int ny,int nz,int nt,int na,int nb
 //      "id_X" -- the image index for each projection
 //      "id_Y" -- the projection index for each image
 //      "nv_block" -- to deal with the GPU time limit
-{   float *y_d,*x_d,*sd_phi_d,*sd_z_d,*y_det_d,*z_det_d;
+{   float *y_d,*yNorm_d,*x_d,*sd_phi_d,*sd_z_d,*y_det_d,*z_det_d;
 	int *id_Y_d,nd,N,id,v0,it,i,n,nv2;
 
 	N=nx*ny*nz;
 	nd=na*nb;
 
 	cudaMalloc(&y_d,nv_block*nd*sizeof(float));
+    cudaMalloc(&yNorm_d,nv_block*nd*sizeof(float));
 	cudaMalloc(&x_d,N*sizeof(float));
 
-	cudaMalloc(&sd_phi_d,nv*sizeof(float));cudaMemcpy(sd_phi_d,sd_phi,nv*sizeof(float),cudaMemcpyHostToDevice);
-	cudaMalloc(&sd_z_d,nv*sizeof(float));cudaMemcpy(sd_z_d,sd_z,nv*sizeof(float),cudaMemcpyHostToDevice);
-	cudaMalloc(&y_det_d,na*sizeof(float));cudaMemcpy(y_det_d,y_det,na*sizeof(float),cudaMemcpyHostToDevice);
-	cudaMalloc(&z_det_d,nb*sizeof(float));cudaMemcpy(z_det_d,z_det,nb*sizeof(float),cudaMemcpyHostToDevice);
-	cudaMalloc(&id_Y_d,nt*tmp_size*sizeof(int));cudaMemcpy(id_Y_d,id_Y,nt*tmp_size*sizeof(int),cudaMemcpyHostToDevice);
+	cudaMalloc(&sd_phi_d,nv*sizeof(float));
+    cudaMemcpy(sd_phi_d,sd_phi,nv*sizeof(float),cudaMemcpyHostToDevice);
+	cudaMalloc(&sd_z_d,nv*sizeof(float));
+    cudaMemcpy(sd_z_d,sd_z,nv*sizeof(float),cudaMemcpyHostToDevice);
+	cudaMalloc(&y_det_d,na*sizeof(float));
+    cudaMemcpy(y_det_d,y_det,na*sizeof(float),cudaMemcpyHostToDevice);
+	cudaMalloc(&z_det_d,nb*sizeof(float));
+    cudaMemcpy(z_det_d,z_det,nb*sizeof(float),cudaMemcpyHostToDevice);
+	cudaMalloc(&id_Y_d,nt*tmp_size*sizeof(int));
+    cudaMemcpy(id_Y_d,id_Y,nt*tmp_size*sizeof(int),cudaMemcpyHostToDevice);
 
 	dim3 dimBlock(BLOCK_SIZE_x,BLOCK_SIZE_y);
 
@@ -500,13 +508,14 @@ float SO,float OD,float scale,float dz,int nx,int ny,int nz,int nt,int na,int nb
 			else
 			{nv2=Nv[it]-nv_block*(n-1);}
 			dim3 dimGrid_t((na+dimBlock.x-1)/dimBlock.x,(nv2*nb+dimBlock.y-1)/dimBlock.y);
-			Ax_cone_mf_gpu_kernel_new<<<dimGrid_t, dimBlock>>>(x_d,y_d,sd_phi_d,sd_z_d,y_det_d,z_det_d,&id_Y_d[it*tmp_size+v0],
+			Ax_cone_mf_gpu_kernel_new<<<dimGrid_t, dimBlock>>>(x_d,y_d,yNorm_d,sd_phi_d,sd_z_d,y_det_d,z_det_d,&id_Y_d[it*tmp_size+v0],
 			SO,OD,scale,dz,nx,ny,nz,na,nb,nv2);
 			cudaThreadSynchronize();
 			cudaMemcpy(&y[id*nd],y_d,nv2*nd*sizeof(float),cudaMemcpyDeviceToHost);
+            cudaMemcpy(&yNorm[id*nd],yNorm_d,nv2*nd*sizeof(float),cudaMemcpyDeviceToHost);
 			v0+=nv2;id+=nv2;
 		}
 	}
 
-    cudaFree(y_d);cudaFree(x_d);cudaFree(sd_phi_d);cudaFree(sd_z_d);cudaFree(y_det_d);cudaFree(z_det_d);cudaFree(id_Y_d);
+    cudaFree(y_d);cudaFree(yNorm_d);cudaFree(x_d);cudaFree(sd_phi_d);cudaFree(sd_z_d);cudaFree(y_det_d);cudaFree(z_det_d);cudaFree(id_Y_d);
 }

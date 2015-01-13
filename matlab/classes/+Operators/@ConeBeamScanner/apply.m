@@ -16,7 +16,7 @@ function y=apply(this,object)
             disp('Computing forward cone beam transform with GPU');
             this.para
         end
-        y = Ax_cone_mf(X0,this.para);
+        [y,yNorm] = Ax_cone_mf(X0,this.para);
     end
     if strcmp(this.type,'circle')
         y = DataTypes.CTData('circle',reshape(y,[this.na,this.nb,this.nv]),this.para,object.L,reshape(yNorm,[this.na,this.nb,this.nv]));

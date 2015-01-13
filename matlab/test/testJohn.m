@@ -3,7 +3,7 @@
 clear all;
 N = 256;
 %u0 = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
-%u0 = DataTypes.ObjectData(3,single(unitBall(N,3)),[2,2,2]);
+u0 = DataTypes.ObjectData(3,single(unitBall(N,3)),[2,2,2]);
 %u0 = DataTypes.ObjectData(3,single(gaussian3D(N)),[2,2,2]);
 nd = 128;
 nv = 256;

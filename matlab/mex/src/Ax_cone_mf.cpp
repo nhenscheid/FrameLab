@@ -24,7 +24,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 //      "nv_block" -- to deal with the GPU time limit
 {
     int *id_X,*id_Y,*Nv,nx,ny,nz,nt,nv,na,nb,tmp_size,nv_block,version,GPU;
-    float *X,*y,*sd_phi,*sd_z,*y_det,*z_det,SO,OD,scale,dz;
+    float *X,*y,*yNorm,*sd_phi,*sd_z,*y_det,*z_det,SO,OD,scale,dz;
 
     X=(float*)mxGetData(prhs[0]);
 
@@ -52,8 +52,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     id_X=(int*)mxGetData(mxGetField(prhs[1],0,"id_X"));
 
     plhs[0]=mxCreateNumericMatrix(nv*na*nb,1,mxSINGLE_CLASS,mxREAL);
+    plhs[1]=mxCreateNumericMatrix(nv*na*nb,1,mxSINGLE_CLASS,mxREAL);
     y=(float*)mxGetData(plhs[0]);
+    yNorm=(float*)mxGetData(plhs[1]);
 
+    //To do: git rid of Siddon
     switch(version)
     {   case 0:
             if(GPU==0)
@@ -63,9 +66,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         break;
         case 1:
             if(GPU==0)
-            {Ax_cone_mf_cpu_new(X,y,SO,OD,scale,nx,ny,nz,nv,sd_phi,sd_z,na,nb,y_det,z_det,id_X,dz);}
+            {Ax_cone_mf_cpu_new(X,y,yNorm,SO,OD,scale,nx,ny,nz,nv,sd_phi,sd_z,na,nb,y_det,z_det,id_X,dz);}
             else
-            {Ax_cone_mf_gpu_new(X,y,sd_phi,sd_z,y_det,z_det,id_Y,Nv,SO,OD,scale,dz,nx,ny,nz,nt,na,nb,nv,tmp_size,nv_block);}
+            {Ax_cone_mf_gpu_new(X,y,yNorm,sd_phi,sd_z,y_det,z_det,id_Y,Nv,SO,OD,scale,dz,nx,ny,nz,nt,na,nb,nv,tmp_size,nv_block);}
         break;
     }
 }
