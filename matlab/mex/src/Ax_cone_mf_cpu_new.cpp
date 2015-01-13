@@ -16,12 +16,16 @@
 #include "mex.h"
 #define ABS(a) (a>0?a:-(a))
 
-void Ax_cone_mf_cpu_new(float *X,float *y,float SO,float OD,float scale,int nx,int ny,int nz,int nv,float *sd_phi,float *sd_z,int na,int nb,float *y_det,float *z_det,int *id_X,float dz)
+float norm3(float x1,float y1,float z1,float x2,float y2,float z2)
+{return sqrt(pow(x1-x2,2)+pow(y1-y2,2)+pow(z1-z2,2));}
+
+
+void Ax_cone_mf_cpu_new(float *X,float *y,float *yNorm,float SO,float OD,float scale,int nx,int ny,int nz,int nv,float *sd_phi,float *sd_z,int na,int nb,float *y_det,float *z_det,int *id_X,float dz)
 // A new method for computing the X-ray transform (infinitely-narrow beam)
 // The algorithm details are available in
 // H. Gao. "Fast parallel algorithms for the X-ray transform and its adjoint", Medical Physics (2012).
 {   int n,nd,nx2,ny2,nz2,ix,iy,iz,iv,id,ia,ib,cx1,cx2,cy1,cy2,cz1,cz2;
-    float *x,cos_phi,sin_phi,x1,y1,x2,y2,z1,z2,xx1,yy1,zz1,xx2,yy2,zz2,slope1,slope2,l,d,tmp,rx,ry,rz;
+    float norm,*x,cos_phi,sin_phi,x1,y1,x2,y2,z1,z2,xx1,yy1,zz1,xx2,yy2,zz2,slope1,slope2,l,d,tmp,rx,ry,rz;
 
     nx2=nx/2;ny2=ny/2;nz2=nz/2;
     n=nx*ny*nz;
@@ -29,10 +33,10 @@ void Ax_cone_mf_cpu_new(float *X,float *y,float SO,float OD,float scale,int nx,i
 
     for(iv=0;iv<nv;iv++)
     {   
-        mexPrintf("%s%i\n","iv = ", iv);
-        mexPrintf("%s%f\n","x1 = ",x1);
-        mexPrintf("%s%f\n","y1 = ",y1);
-        mexPrintf("%s%f\n","z1 = ",z1);
+        //mexPrintf("%s%i\n","iv = ", iv);
+        //mexPrintf("%s%f\n","x1 = ",x1);
+        //mexPrintf("%s%f\n","y1 = ",y1);
+        //mexPrintf("%s%f\n","z1 = ",z1);
         x=&X[id_X[iv]*n];
         cos_phi=(float)cos(sd_phi[iv]);sin_phi=(float)sin(sd_phi[iv]);
         x1=cos_phi*(-SO);
@@ -43,12 +47,14 @@ void Ax_cone_mf_cpu_new(float *X,float *y,float SO,float OD,float scale,int nx,i
             {   x2=cos_phi*OD-sin_phi*y_det[ia];
                 y2=sin_phi*OD+cos_phi*y_det[ia];
                 z2=z_det[ib]+sd_z[iv];
+                norm = norm3(x1,y1,z1,x2,y2,z2)*scale;
                 //mexPrintf("%s%f\n","x1 = ",x1);
                 //mexPrintf("%s%f\n","y1 = ",y1);
                 //mexPrintf("%s%f\n","z1 = ",z1);
                 //mexPrintf("%s%f\n","x2 = ",x2);
                 //mexPrintf("%s%f\n","y2 = ",y2);
                 //mexPrintf("%s%f\n","z2 = ",z2);
+                //mexPrintf("%s%f\n","norm = ",norm);
                 id=ib*na+ia;
                 y[iv*nd+id]=0;
                 // assuming z1-z2 is small
@@ -220,7 +226,9 @@ void Ax_cone_mf_cpu_new(float *X,float *y,float SO,float OD,float scale,int nx,i
                         }
                     }
                 }
+                
                 y[iv*nd+id]*=scale;
+                yNorm[iv*nd+id] = y[iv*nd+id]/norm;
             }
         }
     }

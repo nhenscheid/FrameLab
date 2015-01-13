@@ -3,9 +3,10 @@ classdef FanBeamScanner < handle
         scanType = '2DFan'; %Support for other geometries later
         nd = 256; %Number of detectors
         nv = 256; %Number of views
-        SO = single(54.1);%Source to isocenter
-        OD = single(40.8);%Detector to isocenter
-        dy_det =single(0.15/2); %Detector spacing  (!!!NEED DEFAULT VALUE!!!)
+        SO = single(5.0);%Source to isocenter
+        OD = single(5.0);%Detector to isocenter
+        Ly = single(6.0)%Detector width
+        %dy_det =single(0.15/2); %Detector spacing  (!!!NEED DEFAULT VALUE!!!)
         para = struct; %struct of parameters to pass to Gao's methods
         y_os = single(0.0);
     end

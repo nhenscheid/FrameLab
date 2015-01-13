@@ -1,4 +1,7 @@
 classdef ConeBeamScanner < handle
+    %obj = ConeBeamScanner(type,na,nb,nv,zmax,rps,vtab,fps,phaseShift)
+    % TO-DO (1/12/15)
+    % Check for unbounded objects?
     properties (SetAccess = private)
         type = 'circle'; % circle or helix
         na = 256;
@@ -6,8 +9,8 @@ classdef ConeBeamScanner < handle
         nv = 128;
         SO = single(5.0);%Source to isocenter (cm)
         OD = single(5.0);%Detector to isocenter (cm)
-        Ly = single(6.0); % Width of detector panel (cm)
-        Lz = single(6.0); % Height of detector panel (cm)
+        Ly = single(9.0); % Width of detector panel (cm)
+        Lz = single(9.0); % Height of detector panel (cm)
         P = single(0.5); % Helix pitch (cm) 
         para = struct; %struct of parameters to pass to Gao's methods
         y_os = single(0.0);

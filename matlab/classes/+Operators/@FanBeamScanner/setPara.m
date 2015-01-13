@@ -7,7 +7,8 @@ function setPara(this,object)
     %%%%Scanner parameters***%
     this.para.SO = this.SO/scale; %Source-isocenter spacing
     this.para.OD = this.OD/scale; %Isocenter-detector plane spacing
-    this.para.dy_det = this.dy_det/scale; %Detector pixel spacing
+    dy_det = this.Ly/this.nd; %Detector pixel spacing
+    this.para.dy_det = dy_det/scale; %Detector pixel spacing
     this.para.y_os = single(0.0);
    
     %***Object parameters***%
@@ -19,7 +20,7 @@ function setPara(this,object)
     
     %***Scan variables (derived from scanner params)
     this.para.sd_phi = single(2*pi/this.nv*(0:this.nv-1));
-    this.para.y_det=single(((-this.nd/2:this.nd/2-1)+0.5)*this.dy_det+this.y_os)/scale;
+    this.para.y_det=single(((-this.nd/2:this.nd/2-1)+0.5)*dy_det+this.y_os)/scale;
     this.para.cos_phi = cos(this.para.sd_phi);
     this.para.sin_phi = sin(this.para.sd_phi);
     this.para.cos_det = [];

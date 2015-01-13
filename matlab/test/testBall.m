@@ -1,9 +1,30 @@
-% Test the cone beam scanner with a unit ball
+% Test the fan and cone beam scanners with a unit disc/ball
+%% Fan beam geometry
+N = 10000;
+u0 = DataTypes.ObjectData(2,single(unitBall(N,2)),[2,2]);
+nd = 10;
+nv = 1;
+fbct = Operators.FanBeamScanner(nd,nv)
+y = fbct.apply(u0);
+y = y.dataArray;
+y_det = fbct.para.y_det*fbct.para.scale;
+
+l = @(a1)4*sqrt(-6+625/(100+a1^2));
+
+yexact = zeros(nd,1);
+for i=1:nd
+    if imag(l(y_det(i)))==0
+        yexact(i) = l(y_det(i));
+    end
+end
+disp(sprintf('%s%d\n','Max error is ',max(abs(y-yexact(:)))/max(abs(yexact))))
+disp(sprintf('%s%d\n','L2 error is ',norm(y-yexact)/norm(yexact)))
+%% Circular source path
 clear all;clc
 N = 256;
-u0 = DataTypes.ObjectData(3,single(ball3d(N)),[2,2,2]);
+u0 = DataTypes.ObjectData(3,single(unitBall(N,3)),[2,2,2]); %unit ball, diameter = 2
 nd = 128;
-nv = 10;
+nv = 1;
 
 disp('Testing circular scan');
 cbct = Operators.ConeBeamScanner('circle',nd,nd,nv);
@@ -39,6 +60,7 @@ for i = 1:nv
     disp(sprintf('%s%d\n','L2 error is ',sqrt(sum(abs(yexact(:)-y1(:)).^2))/sqrt(sum(abs(yexact(:))))))
 end
 
+%% Helical 
 disp('Testing helical scan');
 cbct = Operators.ConeBeamScanner('helix',nd,nd,[],2,4,2,64);
 cbct.verbose = true;

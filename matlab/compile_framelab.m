@@ -26,7 +26,7 @@ switch GPU
     case 0
         %bins = {'Ax_fan_mf_cpu','Atx_fan_mf_cpu','Ax_cone_mf_cpu',...
         %        'Atx_cone_mf_cpu'};
-        bins = {'Ax_cone_mf_cpu','Atx_cone_mf_cpu'};
+        bins = {'Ax_cone_mf_cpu'};
 end
 
 
@@ -52,6 +52,9 @@ Atx_cone_mf = [' Atx_cone_mf.cpp',' Atx_cone_mf_cpu_new.cpp',...
            
 Ax_fan_mf_cpu = [' Ax_fan_mf_cpu.cpp',' Ax_fan_mf_cpu_new.cpp',...
                  ' find_area.cpp',' sort_alpha.cpp'];
+             
+Ax_cone_mf_cpu = [' Ax_cone_mf_cpu.cpp',...
+                  ' Ax_cone_mf_cpu_new.cpp',' sort_alpha.cpp'];
 
 GPUFLAGS = sprintf('-v -L"%s" -lcudart -I"./"',CUDALIB);
 CPUFLAGS = '-v -I"./"';

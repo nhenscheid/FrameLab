@@ -31,13 +31,13 @@ function setPara(this,object)
         dphi = 2*pi*this.rps/this.fps;
         this.para.sd_phi = single(0:dphi:phiMax);
         h = this.vtab/(2*pi*this.rps);
-        this.para.sd_z = single(h*this.para.sd_phi)/scale;
+        this.para.sd_z = single(h*this.para.sd_phi-this.zmax/2)/scale;
     elseif strcmp(this.type,'doubleHelix')
         phiMax = this.rps*this.zmax*2*pi/this.vtab;
         dphi = 2*pi*this.rps/this.fps;
         this.para.sd_phi = [single(0:dphi:phiMax),single((0:dphi:phiMax)+this.phaseShift)]; % second helix is phase shifted
         h = this.vtab/(2*pi*this.rps);
-        this.para.sd_z = [single(h*(0:dphi:phiMax))/scale,single(h*(0:dphi:phiMax))/scale]; % same z-coords for both
+        this.para.sd_z = [single(h*(0:dphi:phiMax)-this.zmax/2)/scale,single(h*(0:dphi:phiMax)-this.zmax/2)/scale]; % same z-coords for both
     end
     
     this.para.y_det=single(((-this.na/2:this.na/2-1)+0.5)*dy_det+this.y_os)/scale;

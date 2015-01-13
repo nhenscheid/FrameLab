@@ -3,13 +3,14 @@ classdef CTData
         scanType; %options are 'cone' and 'fan'
         para; %Parameter struct
         dataArray; %array of size [na nb nv] 
+        dataArrayNorm;
         L; %Object size 
     end
     
     
     methods
         %***Constructor***%
-        function obj = CTData(scanType,dataArray,para,L)
+        function obj = CTData(scanType,dataArray,para,L,dataArrayNorm)
             if nargin>1
                dataArray = single(dataArray); 
             end
@@ -21,6 +22,7 @@ classdef CTData
                 obj.para = para;
                 obj.dataArray = dataArray;
                 obj.L = L;
+                obj.dataArrayNorm = dataArrayNorm;
                 if(nargin==4)
                     obj.scanType = scanType;
                 end            
