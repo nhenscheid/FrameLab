@@ -12,6 +12,9 @@ classdef ObjectData < handle & matlab.mixin.Copyable %not sure why handle
         %***Constructor***%
         function obj = ObjectData(dim,array,L)
             %!!!INPUT CHECK!!!%
+            if nargin>1
+                array = single(array);
+            end
             if nargin>=1
                 obj.dim = dim;
             end
@@ -90,9 +93,10 @@ classdef ObjectData < handle & matlab.mixin.Copyable %not sure why handle
             obj.dataArray = -obj.dataArray;
         end
         
-        function obj = mtimes(alpha,obj)
-            %multiply this object's dataArray by a matrix
-            obj.dataArray = alpha*obj.dataArray;
+        function c = mtimes(alpha,obj)
+            % Multiply this object's dataArray by a scalar or matrix
+            % Should check dimensions, etc
+            c = DataTypes.ObjectData(obj.dim,alpha*obj.dataArray,obj.L);
         end
         
         function c = plus(a,b)
@@ -103,12 +107,22 @@ classdef ObjectData < handle & matlab.mixin.Copyable %not sure why handle
             c = DataTypes.ObjectData(a.dim,a.dataArray+b.dataArray,a.L);
         end
         
+        function c = minus(a,b)
+            %add two objectDatas and store the result in the first's dataArray
+            if((a.dim~=b.dim)||(max(a.L~=b.L)))
+                error('Either dimensions or sizes are wrong!')
+            end
+            c = DataTypes.ObjectData(a.dim,a.dataArray-b.dataArray,a.L);
+        end
+        
         function y = objdot(obj,obj2)
             %dot product of two objects of type ObjectData
             y = dot(obj.dataArray(:),obj2.dataArray(:));
         end
         
-        
+        function y = norm(obj)
+            y = sqrt(obj.objdot(obj)); 
+        end
         
         
     end%methods

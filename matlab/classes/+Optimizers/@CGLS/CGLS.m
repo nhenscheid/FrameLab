@@ -12,12 +12,13 @@ classdef CGLS
         b; % Rhs
         u0; % Initial solution guess 
         lam; % Regularization parameter
+        uExact;
     end
 
 
     methods 
         %***Constructor***%
-        function obj = CGLS(A,At,b,u0,lam,globalIter,convergenceTol)
+        function obj = CGLS(A,At,b,u0,lam,globalIter,convergenceTol,uExact)
             if nargin<5
                error('CGLS requires A, At, b, u0 and lam'); 
             end
@@ -33,6 +34,8 @@ classdef CGLS
                 elseif nargin==7
                     obj.globalIter = globalIter;
                     obj.convergenceTol = convergenceTol;
+                elseif nargin==8
+                    obj.uExact = uExact;
                 else
                     obj.globalIter = 500; %Prob too big
                     obj.convergenceTol = 1e-14; %Prob too small 

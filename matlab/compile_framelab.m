@@ -17,12 +17,13 @@ if linux
     mexext = '.mexa64'; % Assuming 64 bit.
 end
 
-% Which binaries to compile?  (add or remove if you need)
+% Which binaries to compile?  (add or remove if you need) 
 switch GPU
     case 1
         %bins = {'Ax_fan_mf','Atx_fan_mf','Ax_cone_mf','Atx_cone_mf'};
-        bins = {'Ax_cone_mf','Atx_cone_mf'};
+        %bins = {'Ax_cone_mf','Atx_cone_mf'};
         %bins = {'Ax_fan_mf','Atx_fan_mf'};
+        bins = {'Ax_cone_mf'};
     case 0
         %bins = {'Ax_fan_mf_cpu','Atx_fan_mf_cpu','Ax_cone_mf_cpu',...
         %        'Atx_cone_mf_cpu'};
@@ -34,6 +35,7 @@ end
 %%%%%%%%%%%%%%%%% *** DO NOT MODIFY BELOW THIS LINE *** %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%NOTE: Must leave a space at the beginning of each file name!
 Ax_fan_mf = [' Ax_fan_mf.cpp',' Ax_fan_mf_cpu_siddon.cpp',...
            ' Ax_fan_mf_cpu_new.cpp',' Ax_fan_mf_cpu_new_fb.cpp',...
            ' Ax_fan_mf_gpu_siddon.cu',' Ax_fan_mf_gpu_new.cu',...
@@ -52,6 +54,9 @@ Atx_cone_mf = [' Atx_cone_mf.cpp',' Atx_cone_mf_cpu_new.cpp',...
            
 Ax_fan_mf_cpu = [' Ax_fan_mf_cpu.cpp',' Ax_fan_mf_cpu_new.cpp',...
                  ' find_area.cpp',' sort_alpha.cpp'];
+             
+Ax_cone_mf_cpu = [' Ax_cone_mf_cpu.cpp',...
+                  ' Ax_cone_mf_cpu_new.cpp',' sort_alpha.cpp'];
 
 % For some reason, the cuda machine only likes linking to matlab's built-in
 % libcudart.

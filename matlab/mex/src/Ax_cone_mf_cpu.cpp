@@ -56,20 +56,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     y=(float*)mxGetData(plhs[0]);
     yNorm=(float*)mxGetData(plhs[1]);
 
-    //To do: git rid of Siddon
-    switch(version)
-    {   case 0:
-            if(GPU==0)
-            {Ax_cone_mf_cpu_siddon(X,y,SO,OD,scale,nx,ny,nz,nv,sd_phi,sd_z,na,nb,y_det,z_det,id_X,dz);}
-            else
-            {Ax_cone_mf_gpu_siddon(X,y,sd_phi,sd_z,y_det,z_det,id_Y,Nv,SO,OD,scale,dz,nx,ny,nz,nt,na,nb,nv,tmp_size,nv_block);}
-        break;
-        case 1:
-            if(GPU==0)
-            {Ax_cone_mf_cpu_new(X,y,yNorm,SO,OD,scale,nx,ny,nz,nv,sd_phi,sd_z,na,nb,y_det,z_det,id_X,dz);}
-            else
-            {Ax_cone_mf_gpu_new(X,y,yNorm,sd_phi,sd_z,y_det,z_det,id_Y,Nv,SO,OD,scale,dz,nx,ny,nz,nt,na,nb,nv,tmp_size,nv_block);}
-        break;
-    }
+   
+    Ax_cone_mf_cpu_new(X,y,yNorm,SO,OD,scale,nx,ny,nz,nv,sd_phi,sd_z,na,nb,y_det,z_det,id_X,dz);
+            
 }
 

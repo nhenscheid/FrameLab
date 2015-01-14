@@ -6,8 +6,8 @@ function checkInputs(this,X0)
     validateattributes(this.para.ny,{'uint32'},{'positive'});
     validateattributes(this.para.nz,{'uint32'},{'positive'});
     validateattributes(this.para.nt,{'uint32'},{'positive'});%\geq 1
-    validateattributes(this.para.sd_phi,{'single'},{'numel',this.nv});
-    validateattributes(this.para.sd_z,{'single'},{'numel',this.nv});
+    %validateattributes(this.para.sd_phi,{'single'},{'numel',this.nv});
+    %validateattributes(this.para.sd_z,{'single'},{'numel',this.nv});
     validateattributes(this.para.y_det,{'single'},{'numel',this.na});
     validateattributes(this.para.z_det,{'single'},{'numel',this.nb});
     validateattributes(this.para.cos_phi,{'single'},{});
