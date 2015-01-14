@@ -53,7 +53,10 @@ Atx_cone_mf = [' Atx_cone_mf.cpp',' Atx_cone_mf_cpu_new.cpp',...
 Ax_fan_mf_cpu = [' Ax_fan_mf_cpu.cpp',' Ax_fan_mf_cpu_new.cpp',...
                  ' find_area.cpp',' sort_alpha.cpp'];
 
-GPUFLAGS = sprintf('-v -L"%s" -lcudart -I"./"',CUDALIB);
+% For some reason, the cuda machine only likes linking to matlab's built-in
+% libcudart.
+%GPUFLAGS = sprintf('-v -L"%s" -lcudart -I"./"',CUDALIB);
+GPUFLAGS = sprintf('-v -L -lcudart -I"./"');
 CPUFLAGS = '-v -I"./"';
 
 switch GPU
