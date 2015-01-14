@@ -3,6 +3,9 @@
 \usepackage{fullpage}
 
 \begin{document}
+\begin{center}
+Notes for Framelab
+\end{center}
 
 Recall the definition of the divergent beam X-ray transform: 
 
@@ -17,9 +20,43 @@ $\mathcal{D}u$ can be extended as a homogenous function to $\R^n\times \R^n$ via
 \end{align*} In this format, $\xi$ is interpreted as a source position and $\eta$ as a detector position, so that $\frac{\eta-\xi}{\vert \eta-\xi\vert}\in S^{n-1}$ is a unit vector pointing from $\xi$ to $\eta$.  
 
 To parameterize $\mathcal{P}u$ for the cone beam geometry, we use 
+
+\begin{equation}
+\begin{aligned}[c]
+\xi_1 &= \xi_1(\theta,a,b,\zeta) = R_s\cos\theta \\
+\xi_2 &= \xi_2(\theta,a,b,\zeta) = R_s\sin\theta \\
+\xi_3 &= \xi_3(\theta,a,b,\zeta) = h\theta + \zeta
+\end{aligned}\qquad \qquad
+\begin{aligned}[c]
+\eta_1 &= \eta_1(\theta,a,b,\zeta) = -R_d\cos\theta-a\sin\theta \\
+\eta_2 &= \eta_2(\theta,a,b,\zeta) = -R_d\sin\theta+a\cos\theta \\
+\eta_3 &= \eta_3(\theta,a,b,\zeta) = h\theta + b + \zeta 
+\end{aligned} \label{param}
+\end{equation} $R_s,R_d$ are the source-to-isocenter and isocenter-to-detector distances, respectively.  $(a,b)$ are the coordinates on the detector plane.  $\theta$ is the gantry rotation angle, and $\zeta$ is a vertical offset.  $h=P/2\pi$ where $P$ is the helix pitch.  We thus obtain the cone beam transform: 
 \begin{align*}
+(\P_cu)(\theta,a,b,\zeta) = \int_0^\infty u\left(\xi+t\frac{\eta-\xi}{\vert \eta-\xi\vert}\right)d\xi
+\end{align*}where $\xi=\xi(\theta,a,b,\zeta),\eta=\eta(\theta,a,b,\zeta)$ are as described in \eqref{param}.  For code validation purposes, we would like to compute $\P_cu$ for some simple functions $u$ when $\xi\in \Gamma\subset\R^3$ is a smooth curve. 
 
-
+\paragraph{Characteristic Function of the Unit Ball}
+The first example we will use is the characteristic function of the unit ball, $u = \chi_{B}(x)$.  The ray transform of $\chi_B(x)$ is simply the length of intersection of the ray $\overrightarrow{\xi\eta}$ with the unit ball.  To compute this length, we use the fact that on $\partial B$ we have
+\begin{align*}
+\vert x\vert ^2 = 1
+\end{align*}  The equation of a line from $\xi$ to $\eta$ is given by 
+\begin{align*}
+x(t) = \xi+t\frac{\eta-\xi}{\vert \eta-\xi\vert}
+\end{align*}thus to find the intersection points, we find where $\vert x(t)\vert^2 = 1$: 
+\begin{align*}
+\vert x(t)\vert ^2 = \left\vert \xi+t\frac{\eta-\xi}{\vert \eta-\xi\vert}\right\vert ^2  &= \left(\xi+t\frac{\eta-\xi}{\vert \eta-\xi\vert}\right)\cdot \left(\xi+t\frac{\eta-\xi}{\vert \eta-\xi\vert}\right)\\
+& = t^2 + 2t\frac{\xi\cdot(\eta-\xi)}{\vert \eta -\xi\vert} + \vert \xi\vert^2
+\end{align*}Thus $\vert x(t)\vert^2 = 1$ if 
+\begin{align*}
+t^2 + 2t\frac{\xi\cdot(\eta-\xi)}{\vert \eta -\xi\vert} + \vert \xi\vert^2-1=0
 \end{align*}
+
+This is a quadratic equation in $t$, so we can find the entry and exit points $t_{\pm}$ via 
+\begin{align*}
+t_{\pm} = \frac{-\xi\cdot(\eta-\xi)\pm\sqrt{(\xi\cdot (\eta-\xi))^2-(\vert\xi\vert^2-1)\vert\eta-\xi\vert^2}}{\vert\eta-\xi\vert}
+\end{align*}
+
 
 \end{document}
