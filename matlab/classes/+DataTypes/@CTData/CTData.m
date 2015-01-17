@@ -1,7 +1,6 @@
 classdef CTData
     properties (SetAccess = private)
-        scanType; %options are 'cone' and 'fan'
-        para; %Parameter struct
+        scanner; %options are 'cone' and 'fan'
         dataArray; %array of size [na nb nv] 
         dataArrayNorm;
         L; %Object size 
@@ -10,22 +9,12 @@ classdef CTData
     
     methods
         %***Constructor***%
-        function obj = CTData(scanType,dataArray,para,L,dataArrayNorm)
-            if nargin>1
-               dataArray = single(dataArray); 
-            end
-            if(nargin<4)
-               scanType = 'fan'; 
-            end
-            obj.checkInputs(dataArray,para,scanType);
+        function obj = CTData(scanner,dataArray,dataArrayNorm,L)
             if(nargin>0)
-                obj.para = para;
+                obj.scanner = scanner;
                 obj.dataArray = dataArray;
-                obj.L = L;
                 obj.dataArrayNorm = dataArrayNorm;
-                if(nargin==4)
-                    obj.scanType = scanType;
-                end            
+                obj.L = L;
             end
         end % Constructor
         
@@ -36,13 +25,15 @@ classdef CTData
         end%frameletTransform    
         
         function plotData3D(this,n,m,offset)
-            validatestring(this.scanType,{'cone'});
-            plotphantom3D(this.dataArray,n,m,offset);
+            if(strcmp(this.type,'helix')||strcmp(this.type,'multiHelix'))
+                plotphantom3D(this.dataArray,n,m,offset);
+            end
         end
         
         function plotData(this)
-            validatestring(this.scanType,{'fan'});
-            imshow(this.dataArray,[]);
+            if(length(size(this.dataArray))==2)
+                imshow(this.dataArray,[]);
+            end
         end
         
         function c = plus(a,b)
@@ -52,6 +43,9 @@ classdef CTData
             end
             c = DataTypes.CTData(a.scanType,a.dataArray+b,a.para,a.L);
         end
+        
+        %John's equation
+        D = applyJohn(obj)
     end
     
 end

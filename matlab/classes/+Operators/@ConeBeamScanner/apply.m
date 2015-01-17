@@ -19,9 +19,9 @@ function y=apply(this,object)
         [y,yNorm] = Ax_cone_mf(X0,this.para);
     end
     if strcmp(this.type,'circle')
-        y = DataTypes.CTData('circle',reshape(y,[this.na,this.nb,this.nv]),this.para,object.L,reshape(yNorm,[this.na,this.nb,this.nv]));
+        y = DataTypes.CTData(this,reshape(y,[this.na,this.nb,this.nv]),reshape(yNorm,[this.na,this.nb,this.nv]),object.L);
     elseif strcmp(this.type,'helix')
-        y = DataTypes.CTData('helix',reshape(y,[this.na this.nb this.nv]),this.para,object.L,reshape(yNorm,[this.na,this.nb,this.nv]));
+        y = DataTypes.CTData(this,reshape(y,[this.na this.nb this.nv]),reshape(yNorm,[this.na,this.nb,this.nv]),object.L);
     elseif strcmp(this.type,'multiHelix')
         na = this.na;
         nb = this.nb;
@@ -49,6 +49,6 @@ function y=apply(this,object)
 %         A(:,:,:,2) = reshape(y2,[this.na this.nb this.nv/2]);
 %         ANorm(:,:,:,1) = reshape(y1Norm,[this.na this.nb this.nv/2]);
 %         ANorm(:,:,:,2) = reshape(y2Norm,[this.na this.nb this.nv/2]);        
-        y = DataTypes.CTData('multiHelix',A,this.para,object.L,ANorm);
+        y = DataTypes.CTData(this,A,ANorm,object.L);
     end
 end
