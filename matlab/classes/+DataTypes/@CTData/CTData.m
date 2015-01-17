@@ -46,6 +46,7 @@ classdef CTData
         
         %John's equation
         D = applyJohn(obj)
+        D = applyJohnAdjoint(obj)
     end
     
 end
