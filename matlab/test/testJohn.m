@@ -9,11 +9,11 @@ u1 = DataTypes.ObjectData(3,single(gaussian3D(N)),[7,7,7]);
 %u0 = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
 
 % Set up the scanner
-nd = 128;
+nd = 256;
 rps = 1;
-fps = 64;
-zmax = 1;
-vtab = 1;
+fps = 256;
+zmax = 0.25;
+vtab = 0.25;
 nHelix = 2;
 dphi = 2*pi*rps/fps;
 phaseShift = [0,dphi];

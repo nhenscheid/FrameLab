@@ -21,5 +21,5 @@ function y=apply(this,object)
     end
     
     
-    y = DataTypes.CTData('fan',reshape(y,[this.nd,this.nv]),this.para,object.L,[]);
+    y = DataTypes.CTData(this,reshape(y,[this.nd,this.nv]),[],object.L);
 end
