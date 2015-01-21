@@ -25,7 +25,9 @@ close all;
 
 % Define forward and adjoint cone beam operators
 %cbct = Operators.ConeBeamScanner('circle',64,64,64);
-cbct = Operators.ConeBeamScanner(type,128,128,[],2,2,2,128)
+nv = 128;
+nd = 128;
+cbct = Operators.ConeBeamScanner('helix',nd,nd,[],2,4,2,nv);
 A = @(x)cbct.apply(x);
 At = @(x)cbct.applyAdjoint(x);
 
@@ -37,7 +39,8 @@ uTrue = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
 u0 = DataTypes.ObjectData(3,single(zeros(N,N,N)),[2,2,2]);
 f0 = A(uTrue);
 % Add Gaussian noise with deviation sigma to data
-f0 = f0+sigma*randn(cbct.na,cbct.nb,cbct.nv);
+%NOISE CURRENTLY DISABLED
+%f0 = f0+sigma*randn(cbct.na,cbct.nb,cbct.nv);
 Atf0 = At(f0);  % Backprojected data
 
 % Create framelet transforms 

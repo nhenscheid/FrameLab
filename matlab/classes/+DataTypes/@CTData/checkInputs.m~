@@ -1,8 +1,0 @@
-function checkInputs(this,dataArray,para,scanType)
-%Check construction inputs for ConeBeamData 
-
-    validateattributes(dataArray,{'single'},{'size',[para.na,para.nb]})
-
-
-end
-

@@ -1,5 +1,5 @@
 % Implementation of John's equation for helical scans
-function D = applyJohnAdjoint(obj)
+function D = applyJohnAdjoint(obj,smoothed)
     % Extract some scanner parameters 
     cbct = obj.scanner;
     nHelix = cbct.nHelix;
@@ -22,13 +22,14 @@ function D = applyJohnAdjoint(obj)
     g1 = obj.dataArrayNorm(:,:,:,1);
     g2 = obj.dataArrayNorm(:,:,:,2);
 
-    framelet = Transforms.FrameletSystem(3,'linear',2);
-    disp('Computing framelet expansion of f')
-    alpha1 = framelet.forwardTransform(g1);
-    alpha2 = framelet.forwardTransform(g2);
-
-    g1 = alpha1.frameletArray{2}{1,1};
-    g2 = alpha2.frameletArray{2}{1,1};
+    if(smoothed)
+        framelet = Transforms.FrameletSystem(3,'linear',1);
+        disp('Computing framelet expansion of f')
+        alpha1 = framelet.forwardTransform(g1);
+        alpha2 = framelet.forwardTransform(g2);
+        g1 = alpha1.frameletArray{1}{1,1};
+        g2 = alpha2.frameletArray{1}{1,1};
+    end
    
 
     % Compute approximate John's equation 

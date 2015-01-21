@@ -6,7 +6,7 @@ function y=applyAdjoint(this,object)
         this.para = object.para; %If the scanner's parameters aren't set,import para from the object
         
     else
-        if(~structcmp(this.para,object.para))
+        if(~structcmp(this.para,object.scanner.para))
             error('Object scan parameters and scanner parameters do not agree!')
         end
     end

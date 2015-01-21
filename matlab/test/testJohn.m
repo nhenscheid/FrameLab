@@ -3,22 +3,22 @@
 clear all;
 
 % Generate object
-N = 64;
+N = 512;
 u0 = DataTypes.ObjectData(3,single(unitBall(N,3)),[2,2,2]); %unit ball, diameter = 2
-u1 = DataTypes.ObjectData(3,single(gaussian3D(N)),[7,7,7]);
+u1 = DataTypes.ObjectData(3,single(gaussian3D(N)),[5,5,5]);
 %u0 = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
 
 % Set up the scanner
 nd = 256;
 rps = 1;
-fps = 256;
-zmax = 0.25;
-vtab = 0.25;
-nHelix = 2;
+fps = 128;
+zmax = 1;
+vtab = 1;
+nHelix = 3;
 dphi = 2*pi*rps/fps;
-phaseShift = [0,dphi];
+phaseShift = dphi*(0:nHelix-1);
 cbct.verbose = true;
-%cbct.GPU = 1;
+cbct.GPU = 1;
 cbct = Operators.ConeBeamScanner('multiHelix',nd,nd,[],zmax,rps,vtab,fps,nHelix,phaseShift);
 
 % Compute forward transform of u0
@@ -28,12 +28,14 @@ disp('Computing multihelix scan for u1');
 g = cbct.apply(u1);
 
 % Apply John's equation
-D = f.applyJohn();
+D = f.applyJohn(0);
 
-Dt = g.applyJohnAdjoint();
+Dt = g.applyJohnAdjoint(0);
 
 
 y = g.dataArrayNorm(2:end-1,2:end-1,2:end-1,1);
 x = f.dataArrayNorm(2:end-1,2:end-1,2:end-1,1);
 
-abs(dot(D(:),y(:))-dot(Dt(:),x(:)))/abs(dot(D(:),y(:)))
+abs(dot(D(:),y(:))-dot(Dt(:),x(:)))
+
+disp(sprintf('%s%d\n','max(D)=',max(D(:))))

@@ -41,12 +41,12 @@ classdef CTData
             if(size(a.dataArray)~=size(b))
                 error('Array dimension mismatch!')
             end
-            c = DataTypes.CTData(a.scanType,a.dataArray+b,a.para,a.L);
+            c = DataTypes.CTData(a.scanner,a.dataArray+b,a.L);
         end
         
         %John's equation
-        D = applyJohn(obj)
-        D = applyJohnAdjoint(obj)
+        D = applyJohn(obj,smoothed)
+        D = applyJohnAdjoint(obj,smoothed)
     end
     
 end

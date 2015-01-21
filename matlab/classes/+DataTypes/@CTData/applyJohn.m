@@ -1,8 +1,13 @@
-% Implementation of John's equation for helical scans
-function D = applyJohn(obj)
+function D = applyJohn(obj,smoothed)
+    %D=applyJohn(CTData,smoothed) 
+    %Apply John's equation for a multiHelix scan
+    %Smoothed = 1 if we apply to a smoothed version, 0 else
     % Extract some scanner parameters 
     cbct = obj.scanner;
     nHelix = cbct.nHelix;
+    if(nHelix<2)
+        error('Johns equation only applies on multiHelix data!');
+    end
     para = cbct.para;
     scale = para.scale;
     nv = para.Nv/nHelix;
@@ -19,45 +24,61 @@ function D = applyJohn(obj)
     phaseShift = cbct.phaseShift;
     
     %Warning: specialized to 2 helix data!
-    g1 = obj.dataArrayNorm(:,:,:,1);
-    g2 = obj.dataArrayNorm(:,:,:,2);
+    %g1 = obj.dataArrayNorm(:,:,:,1);
+    %g2 = obj.dataArrayNorm(:,:,:,2);
+    g = obj.dataArrayNorm;
 
-    framelet = Transforms.FrameletSystem(3,'linear',2);
-    disp('Computing framelet expansion of f')
-    alpha1 = framelet.forwardTransform(g1);
-    alpha2 = framelet.forwardTransform(g2);
-
-    g1 = alpha1.frameletArray{2}{1,1};
-    g2 = alpha2.frameletArray{2}{1,1};
+    if(smoothed)
+        framelet = Transforms.FrameletSystem(3,'linear',1);
+        disp('Computing framelet expansion of f')
+        alpha = framelet.forwardTransform(g);
+        g = alpha.frameletArray{1}{1,1};
+        %alpha1 = framelet.forwardTransform(g1);
+        %alpha2 = framelet.forwardTransform(g2);
+        %g1 = alpha1.frameletArray{1}{1,1};
+        %g2 = alpha2.frameletArray{1}{1,1};
+    end
 
     % Compute approximate John's equation 
     disp('approximating Johns Equation')
     R = SO+OD;
-    dzeta = -phaseShift(2)*h
+    dzeta = -phaseShift(2)*h %This assumes that each phase shift is the same?
     dphi = 2*pi*cbct.rps/cbct.fps
     da = scale*cbct.para.dy_det
     db = scale*cbct.para.dz_det
 
     % gtb
-    gtb = (g1(:,3:end,3:end)+g1(:,1:end-2,1:end-2)-g1(:,1:end-2,3:end)-g1(:,3:end,1:end-2))/(4*db*dphi);
-    % gaz
-    gaz = (g2(3:end,:,:)+g1(1:end-2,:,:)-g2(1:end-2,:,:)-g1(3:end,:,:))/(4*da*dzeta);
-    % gbz
-    gbz = (g2(:,3:end,:)+g1(:,1:end-2,:)-g2(:,1:end-2,:)-g1(:,3:end,:))/(4*db*dzeta);
+    gtb = (g(:,3:end,3:end,:)+g(:,1:end-2,1:end-2,:)-g(:,1:end-2,3:end,:)-g(:,3:end,1:end-2,:))/(4*db*dphi);
+    % gaz, gbz
+    if(nHelix<3)
+        gaz = (g(3:end,:,:,2)+g(1:end-2,:,:,1)-g(1:end-2,:,:,2)-g(3:end,:,:,1))/(2*da*dzeta);
+        gbz = (g(:,3:end,:,2)+g(:,1:end-2,:,1)-g(:,1:end-2,:,2)-g(:,3:end,:,1))/(2*db*dzeta);
+    else
+        gaz = (g(3:end,:,:,3:end)+g(1:end-2,:,:,1:end-2)-g(1:end-2,:,:,3:end)-g(3:end,:,:,1:end-2))/(4*da*dzeta);
+        gbz = (g(:,3:end,:,3:end)+g(:,1:end-2,:,1:end-2)-g(:,1:end-2,:,3:end)-g(:,3:end,:,1:end-2))/(4*db*dzeta);
+    end
     % gb
-    gb = (g1(:,3:end,:)-g1(:,1:end-2,:))/(2*db);
+    gb = (g(:,3:end,:,:)-g(:,1:end-2,:,:))/(2*db);
     % gbb
-    gbb = (g1(:,3:end,:)+g1(:,1:end-2,:)-2*g1(:,2:end-1,:))/(db*db);
+    gbb = (g(:,3:end,:,:)+g(:,1:end-2,:,:)-2*g(:,2:end-1,:,:))/(db*db);
     % gab
-    gab = (g1(3:end,3:end,:)+g1(1:end-2,1:end-2,:)-g1(3:end,1:end-2,:)-g1(1:end-2,3:end,:))/(4*da*db);
+    gab = (g(3:end,3:end,:,:)+g(1:end-2,1:end-2,:,:)-g(3:end,1:end-2,:,:)-g(1:end-2,3:end,:,:))/(4*da*db);
     % a
-    [a,b,NULL] = ndgrid(y_det,z_det,zeros(nv,1));
+    [a,b,NULL1,NULL2] = ndgrid(y_det,z_det,zeros(nv,1),zeros(nHelix,1));
     % b 
 
-    D = R*gtb(2:end-1,:,:) - R*SO*gaz(:,2:end-1,2:end-1) -...
-        R*h*gbz(2:end-1,:,2:end-1) +...
-        2.*a(2:end-1,2:end-1,2:end-1).*gb(2:end-1,:,2:end-1) +...
-        a(2:end-1,2:end-1,2:end-1).*b(2:end-1,2:end-1,2:end-1).*gbb(2:end-1,:,2:end-1) +...
-        (a(2:end-1,2:end-1,2:end-1).^2+R^2).*gab(:,:,2:end-1);
+    if(nHelix<3)
+        D = R*gtb(2:end-1,:,:,1) - R*SO*gaz(:,2:end-1,2:end-1,1) -...
+            R*h*gbz(2:end-1,:,2:end-1,1) +...
+            2.*a(2:end-1,2:end-1,2:end-1,1).*gb(2:end-1,:,2:end-1,1) +...
+            a(2:end-1,2:end-1,2:end-1,1).*b(2:end-1,2:end-1,2:end-1,1).*gbb(2:end-1,:,2:end-1,1) +...
+            (a(2:end-1,2:end-1,2:end-1,1).^2+R^2).*gab(:,:,2:end-1,1);
+    else
+        D = R*gtb(2:end-1,:,:,2:end-1) - R*SO*gaz(:,2:end-1,2:end-1,:) -...
+            R*h*gbz(2:end-1,:,2:end-1,:) +...
+            2.*a(2:end-1,2:end-1,2:end-1,2:end-1).*gb(2:end-1,:,2:end-1,2:end-1) +...
+            a(2:end-1,2:end-1,2:end-1,2:end-1).*b(2:end-1,2:end-1,2:end-1,2:end-1).*gbb(2:end-1,:,2:end-1,2:end-1) +...
+            (a(2:end-1,2:end-1,2:end-1,2:end-1).^2+R^2).*gab(:,:,2:end-1,2:end-1);
+    end
 
 end

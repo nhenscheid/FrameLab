@@ -29,7 +29,7 @@ function setPara(this,object)
     elseif strcmp(this.type,'helix')
         phiMax = this.rps*this.zmax*2*pi/this.vtab;
         dphi = 2*pi*this.rps/this.fps;
-        this.para.sd_phi = single(0:dphi:phiMax);
+        this.para.sd_phi = single(-phiMax/2:dphi:phiMax/2);
         h = this.vtab/(2*pi*this.rps);
         %this.para.sd_z = single(h*this.para.sd_phi-this.zmax/2)/scale;
         this.para.sd_z = single(h*this.para.sd_phi)/scale;
@@ -39,14 +39,14 @@ function setPara(this,object)
         nHelix = this.nHelix;
         this.para.sd_phi = [];
         for i=1:nHelix
-           this.para.sd_phi = [this.para.sd_phi,single((0:dphi:phiMax)+this.phaseShift(i))];
+           this.para.sd_phi = [this.para.sd_phi,single((-phiMax/2:dphi:phiMax/2)+this.phaseShift(i))];
         end
         %this.para.sd_phi = [single(0:dphi:phiMax),single((0:dphi:phiMax)+this.phaseShift)]; % second helix is phase shifted
         h = this.vtab/(2*pi*this.rps);
         %this.para.sd_z = [single(h*(0:dphi:phiMax)-this.zmax/2)/scale,single(h*(0:dphi:phiMax)-this.zmax/2)/scale]; % same z-coords for both
         this.para.sd_z = [];
         for i=1:nHelix
-            this.para.sd_z = [this.para.sd_z,single(h*(0:dphi:phiMax))/scale];
+            this.para.sd_z = [this.para.sd_z,single(h*(-phiMax/2:dphi:phiMax/2))/scale];
         end
     end
     

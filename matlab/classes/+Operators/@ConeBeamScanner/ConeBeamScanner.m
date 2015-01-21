@@ -9,8 +9,8 @@ classdef ConeBeamScanner < handle
         nv = 128;
         SO = single(5.0);%Source to isocenter (cm)
         OD = single(5.0);%Detector to isocenter (cm)
-        Ly = single(1.0); % Width of detector panel (cm)
-        Lz = single(1.0); % Height of detector panel (cm)
+        Ly = single(6.0); % Width of detector panel (cm)
+        Lz = single(6.0); % Height of detector panel (cm)
         P = single(0.5); % Helix pitch (cm) 
         para = struct; %struct of parameters to pass to Gao's methods
         y_os = single(0.0);
