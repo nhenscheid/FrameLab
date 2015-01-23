@@ -46,9 +46,17 @@ function D = applyJohn(obj,smoothed)
     dphi = 2*pi*cbct.rps/cbct.fps
     da = scale*cbct.para.dy_det
     db = scale*cbct.para.dz_det
+    
+    % Initialize derivative arrays
+    gtb = single(zeros(size(g)));
+    gaz = gtb;
+    gbz = gtb;
+    gb = gtb;
+    gbb = gtb;
+    gab = gtb;
 
     % gtb
-    gtb = (g(:,3:end,3:end,:)+g(:,1:end-2,1:end-2,:)-g(:,1:end-2,3:end,:)-g(:,3:end,1:end-2,:))/(4*db*dphi);
+    gtb(:,2:end-1,2:end-1,:) = (g(:,3:end,3:end,:)+g(:,1:end-2,1:end-2,:)-g(:,1:end-2,3:end,:)-g(:,3:end,1:end-2,:))/(4*db*dphi);
     % gaz, gbz
     if(nHelix<3)
         gaz = (g(3:end,:,:,2)+g(1:end-2,:,:,1)-g(1:end-2,:,:,2)-g(3:end,:,:,1))/(2*da*dzeta);
@@ -80,5 +88,7 @@ function D = applyJohn(obj,smoothed)
             a(2:end-1,2:end-1,2:end-1,2:end-1).*b(2:end-1,2:end-1,2:end-1,2:end-1).*gbb(2:end-1,:,2:end-1,2:end-1) +...
             (a(2:end-1,2:end-1,2:end-1,2:end-1).^2+R^2).*gab(:,:,2:end-1,2:end-1);
     end
+    
+    D = DataTypes.CTData(cbct,obj.dataArray,D,obj.L); 
 
 end

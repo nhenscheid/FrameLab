@@ -68,5 +68,7 @@ function D = applyJohnAdjoint(obj,smoothed)
         abg_bb(2:end-1,:,2:end-1) +...
         R^2*g_ab(:,:,2:end-1) +...
         a2g_ab(:,:,2:end-1);
+    
+    D = DataTypes.CTData(cbct,obj.dataArray,D,obj.L); 
 
 end

@@ -88,7 +88,7 @@ zmax = 2;
 vtab = 2;
 nHelix = 2;
 dphi = 2*pi*rps/fps;
-phaseShift = [0,dphi];
+phaseShift = dphi*(0:nHelix-1);
 disp('Testing multihelix scan');
 cbct = Operators.ConeBeamScanner('multiHelix',nd,nd,[],zmax,rps,vtab,fps,nHelix,phaseShift);
 

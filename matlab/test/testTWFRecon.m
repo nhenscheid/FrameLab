@@ -6,7 +6,8 @@ function [u,f0,err]=testTWFRecon(type,Niter,lam,mu,sigma)
 %
 % Parameters:
 % type is either 'fan', 'circle' or 'helix'
-% lam & mu are augmented Lagrangian parameters
+% lam & mu are augmented Lagrangian parameters - mu is the 'Tikhonov'
+% parameter and lam is the 'sparsity' parameter.
 % sigma is the standard deviation of the additive Gaussian noise
 % 
 % Details:
@@ -25,19 +26,27 @@ close all;
 
 % Define forward and adjoint cone beam operators
 %cbct = Operators.ConeBeamScanner('circle',64,64,64);
-nv = 128;
 nd = 128;
-cbct = Operators.ConeBeamScanner('helix',nd,nd,[],2,4,2,nv);
+rps = 1;
+fps = 32;
+zmax = 1;
+vtab = 1;
+%nHelix = 3;
+%dphi = 2*pi*rps/fps;
+%phaseShift = dphi*(0:nHelix-1);
+%cbct = Operators.ConeBeamScanner('multiHelix',nd,nd,[],zmax,rps,vtab,fps,nHelix,phaseShift);
+cbct = Operators.ConeBeamScanner('helix',nd,nd,[],zmax,rps,vtab,fps);
 A = @(x)cbct.apply(x);
 At = @(x)cbct.applyAdjoint(x);
 
 % Generate phantom, projection and initial guess
-N = 128;
+NTrue = 128;
 %load MRbrain.mat;
 %utrue=single(I)./max(max(max(I)));clear I;
-uTrue = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
-u0 = DataTypes.ObjectData(3,single(zeros(N,N,N)),[2,2,2]);
-f0 = A(uTrue);
+uTrue = DataTypes.ObjectData(3,single(phantom3d(NTrue)),[2,2,2]);
+NRecon = 128;
+u0 = DataTypes.ObjectData(3,single(zeros(NRecon,NRecon,NRecon)),[2,2,2]);
+f0 = A(uTrue)
 % Add Gaussian noise with deviation sigma to data
 %NOISE CURRENTLY DISABLED
 %f0 = f0+sigma*randn(cbct.na,cbct.nb,cbct.nv);
@@ -67,7 +76,7 @@ err=zeros(Niter,1);
 tic
 
 % Create CGLS class to solve least squares
-cgiter=100;
+cgiter=50;
 cgtol=1e-12;
 b = Atf0+mu*Wt(alpha-v);
 solver = Optimizers.CGLS(A,At,b,u0,mu,cgiter,cgtol);

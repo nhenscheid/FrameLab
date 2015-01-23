@@ -1,5 +1,5 @@
 classdef ConeBeamScanner < handle
-    %obj = ConeBeamScanner(type,na,nb,nv,zmax,rps,vtab,fps,phaseShift)
+    %obj =  ConeBeamScanner(type,na,nb,nv,zmax,rps,vtab,fps,nHelix,phaseShift)
     % TO-DO (1/12/15)
     % Check for unbounded objects?
     properties (SetAccess = private)
@@ -30,7 +30,6 @@ classdef ConeBeamScanner < handle
     methods
         %***Constructor***%
         function obj = ConeBeamScanner(type,na,nb,nv,zmax,rps,vtab,fps,nHelix,phaseShift)
-            %ConeBeamScanner(type,na,nb,nv,zmax,rps,vtab,fps)
             %!!!Should check inputs and throw errors if invalid
             if nargin < 4
                 error('You must specify type, na, nb and nv');
@@ -77,7 +76,7 @@ classdef ConeBeamScanner < handle
         y = apply(this,object)
         
         %***Adjoint operator***%
-        y = applyAdjoint(this,object)
+        y = applyAdjoint(this,object,N)
     end %Methods 
     
     methods (Static = true)

@@ -17,9 +17,9 @@ vtab = 1;
 nHelix = 3;
 dphi = 2*pi*rps/fps;
 phaseShift = dphi*(0:nHelix-1);
+cbct = Operators.ConeBeamScanner('multiHelix',nd,nd,[],zmax,rps,vtab,fps,nHelix,phaseShift);
 cbct.verbose = true;
 cbct.GPU = 1;
-cbct = Operators.ConeBeamScanner('multiHelix',nd,nd,[],zmax,rps,vtab,fps,nHelix,phaseShift);
 
 % Compute forward transform of u0
 disp('Computing multihelix scan for u0');

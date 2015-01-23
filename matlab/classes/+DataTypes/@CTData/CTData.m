@@ -1,9 +1,13 @@
 classdef CTData
     properties (SetAccess = private)
-        scanner; %options are 'cone' and 'fan'
+        %scanner; %options are 'cone' and 'fan'
         dataArray; %array of size [na nb nv] 
         dataArrayNorm;
         L; %Object size 
+    end
+    
+    properties 
+        scanner;
     end
     
     
@@ -38,10 +42,11 @@ classdef CTData
         
         function c = plus(a,b)
             %add an array to a CTData object
+            %
             if(size(a.dataArray)~=size(b))
                 error('Array dimension mismatch!')
             end
-            c = DataTypes.CTData(a.scanner,a.dataArray+b,a.L);
+            c = DataTypes.CTData(a.scanner,a.dataArray+b,a.dataArrayNorm,a.L);
         end
         
         %John's equation

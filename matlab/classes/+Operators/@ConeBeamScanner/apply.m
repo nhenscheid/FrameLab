@@ -28,8 +28,8 @@ function y=apply(this,object)
         nv = this.nv/this.nHelix;
         nHelix = this.nHelix;
         
-        A = zeros(na,nb,nv,nHelix);
-        ANorm = zeros(na,nb,nv,nHelix);
+        A = single(zeros(na,nb,nv,nHelix));
+        ANorm = single(zeros(na,nb,nv,nHelix));
         
         for i=1:nHelix
             j1 = (i-1)*na*nb*nv+1;
