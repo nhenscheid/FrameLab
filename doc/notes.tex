@@ -23,19 +23,19 @@ To parameterize $\mathcal{P}u$ for the cone beam geometry, we use
 
 \begin{equation}
 \begin{aligned}[c]
-\xi_1 &= \xi_1(\theta,a,b,\zeta) = R_s\cos\theta \\
-\xi_2 &= \xi_2(\theta,a,b,\zeta) = R_s\sin\theta \\
-\xi_3 &= \xi_3(\theta,a,b,\zeta) = h\theta + \zeta
+\xi_1 &= \xi_1(\theta,\alpha,\beta,\zeta) = R_s\cos\theta \\
+\xi_2 &= \xi_2(\theta,\alpha,\beta,\zeta) = R_s\sin\theta \\
+\xi_3 &= \xi_3(\theta,\alpha,\beta,\zeta) = h\theta + \zeta
 \end{aligned}\qquad \qquad
 \begin{aligned}[c]
-\eta_1 &= \eta_1(\theta,a,b,\zeta) = -R_d\cos\theta-a\sin\theta \\
-\eta_2 &= \eta_2(\theta,a,b,\zeta) = -R_d\sin\theta+a\cos\theta \\
-\eta_3 &= \eta_3(\theta,a,b,\zeta) = h\theta + b + \zeta 
+\eta_1 &= \eta_1(\theta,\alpha,\beta,\zeta) = -R_d\cos\theta-\alpha\sin\theta \\
+\eta_2 &= \eta_2(\theta,\alpha,\beta,\zeta) = -R_d\sin\theta+\alpha\cos\theta \\
+\eta_3 &= \eta_3(\theta,\alpha,\beta,\zeta) = h\theta + \beta + \zeta 
 \end{aligned} \label{param}
-\end{equation} $R_s,R_d$ are the source-to-isocenter and isocenter-to-detector distances, respectively.  $(a,b)$ are the coordinates on the detector plane.  $\theta$ is the gantry rotation angle, and $\zeta$ is a vertical offset.  $h=P/2\pi$ where $P$ is the helix pitch.  We thus obtain the cone beam transform: 
+\end{equation} $R_s,R_d$ are the source-to-isocenter and isocenter-to-detector distances, respectively.  $(\alpha,\beta)$ are the coordinates on the detector plane.  $\theta$ is the gantry rotation angle, and $\zeta$ is a vertical offset.  $h=P/2\pi$ where $P$ is the helix pitch.  We thus obtain the cone beam transform: 
 \begin{align*}
-(\P_cu)(\theta,a,b,\zeta) = \int_0^\infty u\left(\xi+t\frac{\eta-\xi}{\vert \eta-\xi\vert}\right)d\xi
-\end{align*}where $\xi=\xi(\theta,a,b,\zeta),\eta=\eta(\theta,a,b,\zeta)$ are as described in \eqref{param}.  For code validation purposes, we would like to compute $\P_cu$ for some simple functions $u$ when $\xi\in \Gamma\subset\R^3$ is a smooth curve. 
+(\P_cu)(\theta,\alpha,\beta,\zeta) = \int_0^\infty u\left(\xi+t\frac{\eta-\xi}{\vert \eta-\xi\vert}\right)d\xi
+\end{align*}where $\xi=\xi(\theta,\alpha,\beta,\zeta),\eta=\eta(\theta,\alpha,\beta,\zeta)$ are as described in \eqref{param}.  For code validation purposes, we would like to compute $\P_cu$ for some simple functions $u$ when $\xi\in \Gamma\subset\R^3$ is a smooth curve. 
 
 \paragraph{Characteristic Function of the Unit Ball}
 The first example we will use is the characteristic function of the unit ball, $u = \chi_{B}(x)$.  The ray transform of $\chi_B(x)$ is simply the length of intersection of the ray $\overrightarrow{\xi\eta}$ with the unit ball.  To compute this length, we use the fact that on $\partial B$ we have
@@ -66,8 +66,16 @@ Using the parametrizations for $\xi,\eta$ as in \eqref{param} and setting $R:=R_
 
 \section{John's Equation}
 
+
+
 \begin{align*}
 Rg_{\theta b} - RR_s g_{a\zeta} - Rhg_{b\zeta} + 2ag_b + abg_{bb} + (a^2+R^2)g_{ab} = 0
+\end{align*}
+
+Adjoint 
+
+\begin{align*}
+Rg_{\theta b} - RR_s g_{a\zeta} - Rhg_{b\zeta} - 2(ag)_b + (abg)_{bb} + R^2 g_{ab} + (a^2 g)_{ab} 
 \end{align*}
 
 
