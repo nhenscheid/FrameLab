@@ -12,9 +12,9 @@ cgtol = 1e-8;
 %u0 = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
 
 % Set up the scanner
-nd = 256;
+nd = 64;
 rps = 1;
-fps = 128;
+fps = 64;
 zmax = 1;
 vtab = 1;
 nHelix = 1;
@@ -27,9 +27,8 @@ cbct.GPU = 1;
 % Define local handles for operators
 RL = @(x)changeScanner(x,u0,'down');
 RLt = @(x)changeScanner(x,u0,'up');
-D = @(x)(x.applyJohn(0));
-Dt = @(x)(x.applyJohnAdjoint(0));
-A = @(x)(RLt(RL(x))+lam*Dt(D(x)));
+DtD = @(x)(x.applyJohnNormal(0));
+A = @(x)(RLt(RL(x))+lam*DtD(x));
 
 % Compute forward transform of u0
 disp('Computing single helix scan for u0');

@@ -65,7 +65,30 @@ Using the parametrizations for $\xi,\eta$ as in \eqref{param} and setting $R:=R_
 
 
 \section{John's Equation}
+\subsection{Finite Difference Matrices via Kronecker Products}
+Recall the definition of the Kronecker product of two matrices: 
+\begin{align*}
+A\otimes B = \left(\begin{array}{c|c|c}
+a_{11}B &\ldots & a_{1n}B\\\hline
+\vdots & \ddots & \vdots \\\hline 
+a_{n1}B & \ldots & a_{nn}B
+\end{array}\right) 
+\end{align*}
+First suppose that we have a function $g:\Omega\rightarrow \C$ with 2 arguments $x,y$. For now we assume $\Omega = [0,1]^2$. We discretize $\Omega$ with a Cartesian grid $\Omega_{N_xN_y}: $
+\begin{align*}
+\Omega_{N_xN_y} = \{(x_i,y_j) : 1\leq i\leq N_x,\quad 1\leq j\leq N_y\},\quad x_i &= (i-1)\Delta x,\quad y_j = (j-1)\Delta y,\\ 
+\Delta x &=\frac{1}{N_x-1},\quad \Delta y = \frac{1}{N_y-1}
+\end{align*} Then, we will store an approximation to $g$ as a matrix $G$ in matlab, where 
+\begin{align*}
+G[i,j] \approx g(x_i,y_j)
+\end{align*} \textbf{Note: this is the ndgrid() convention, as opposed to the meshgrid() convention.}
 
+
+
+Define a one-dimensional interior (no boundary conditions) centered finite difference matrix using Matlab's sparse diagonal matrix function:
+\begin{align*}
+D^1_x = \text{spdiags([-ones(Nx,1), zeros(Nx,1), ones(Nx,1)], 0:2, Nx-2, Nx  )}
+\end{align*}
 
 
 \begin{align*}

@@ -5,10 +5,10 @@ fa = @(a,b,t,z)cos(a).*cos(b).*exp(t).*z;
 fb = @(a,b,t,z)-sin(a).*sin(b).*exp(t).*z;
 faz = @(a,b,t,z)cos(a).*cos(b).*exp(t);
 
-na = 67;
-nb = 63;
-nt = 60;
-nz = 4; 
+na = 128;
+nb = 128;
+nt = 128;
+nz = 3; 
 
 da = 1/(na-1);
 db = 1/(nb-1);
@@ -30,11 +30,15 @@ disp('Testing a derivative')
 ea = ones(na,1);
 za = zeros(na,1); 
 Da = spdiags([-ea za ea],0:2,na-2,na);
+tic
 D2 = kron(eye(nb),Da);
 D3 = kron(eye(nt),D2);
 D = kron(eye(nz),D3)/(2*da);
+toc
 
+tic
 ua = reshape(D*u(:),[na-2,nb,nt,nz]);
+toc
 
 ua_e2 = ua_e(2:end-1,:,:,:);
 norm(ua(:)-ua_e2(:))/norm(ua_e2(:))
@@ -55,11 +59,12 @@ norm(ub(:)-ub_e2(:))/norm(ub_e2(:))
 disp('Testing az derivative')
 ez = ones(nz,1);
 zz = zeros(nz,1);
-Dz = spdiags([-ez ez],0:1,nz-1,nz);
+Da = spdiags([-ea za ea],0:2,na-2,na)/(2*da);
+Dz = spdiags([-ez ez],0:1,nz-1,nz)/dz;
  
 D1 = kron(eye(nb),Da);
 D2 = kron(Dz,eye(nt));
-D = kron(D2,D1)/(2*da*dz);
+D = kron(D2,D1);
 
 uaz = reshape(D*u(:),[na-2,nb,nt,nz-1]);
 uaz_e2 = uaz_e(2:end-1,:,:,1:end-1);
