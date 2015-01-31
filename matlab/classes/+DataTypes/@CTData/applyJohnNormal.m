@@ -42,10 +42,10 @@ function D = applyJohnNormal(obj,smoothed)
     % Compute approximate John's equation 
     disp('approximating Johns Equation')
     R = double(SO+OD);
-    dzeta = double(-phaseShift(2)*h) %This assumes that each phase shift is the same?
-    dtheta = double(2*pi*cbct.rps/cbct.fps)
-    da = double(scale*cbct.para.dy_det)
-    db = double(scale*cbct.para.dz_det)
+    dzeta = double(-phaseShift(2)*h); %This assumes that each phase shift is the same?
+    dtheta = double(2*pi*cbct.rps/cbct.fps);
+    da = double(scale*cbct.para.dy_det);
+    db = double(scale*cbct.para.dz_det);
     
     % Upgrade g to a double matrix (Matlab can only do sparse doubles) 
     g = double(g);
@@ -134,13 +134,6 @@ function D = applyJohnNormal(obj,smoothed)
     % a and b
     
     
-    disp('size of Dtb')
-    size(Db)
-    disp('size of a and b:')
-    aint = a(:,2:end-1,:,:);
-    size(aint(:))
-    size(b(:))
-    
     if(nz<3)
         %D = R*gtb(2:end-1,:,:,1) - R*SO*gaz(:,2:end-1,2:end-1,1) -...
         %    R*h*gbz(2:end-1,:,2:end-1,1) +...
@@ -159,7 +152,5 @@ function D = applyJohnNormal(obj,smoothed)
     end
     
    D = reshape((Dfull')*Dnew(:),[na,nb,nv,nz]);
-   disp('Size of Dt')
-   size(D)
 
 end

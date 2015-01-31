@@ -5,8 +5,8 @@ clear all;
 % Generate object
 N = 256;
 u0 = DataTypes.ObjectData(3,single(unitBall(N,3)),[2,2,2]); %unit ball, diameter = 2
-lam = 1;
-cgiter = 10;
+lam = 100;
+cgiter = 100;
 cgtol = 1e-8;
 %u1 = DataTypes.ObjectData(3,single(gaussian3D(N)),[5,5,5]);
 %u0 = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
@@ -21,6 +21,9 @@ nHelix = 1;
 dphi = 2*pi*rps/fps;
 phaseShift = dphi*(0:nHelix-1);
 cbct = Operators.ConeBeamScanner('multiHelix',nd,nd,[],zmax,rps,vtab,fps,nHelix,phaseShift);
+nHelix2 = 2;
+phaseShift2 = dphi*(0:nHelix2-1);
+cbct2 = Operators.ConeBeamScanner('multiHelix',nd,nd,[],zmax,rps,vtab,fps,nHelix2,phaseShift2);
 cbct.verbose = true;
 cbct.GPU = 1;
 
@@ -33,6 +36,7 @@ A = @(x)(RLt(RL(x))+lam*DtD(x));
 % Compute forward transform of u0
 disp('Computing single helix scan for u0');
 f0 = cbct.apply(u0);
+f_exact = cbct2.apply(u0);
 
 % Interpolated f 
 f = RLt(f0);
@@ -45,8 +49,8 @@ b = RLt(f0);
     uk = f;
     gammaold = rk.objdot(rk); %object rk must have dot product method
     icg = 0;
-    cgiter = obj.globalIter;
-    cgtol = obj.convergenceTol;
+    %cgiter = obj.globalIter;
+    %cgtol = obj.convergenceTol;
     % Main conjugate gradient loop
     while icg<cgiter
         icg = icg+1;
@@ -61,5 +65,7 @@ b = RLt(f0);
         if(gammaold<cgtol)
             icg = cgiter;
         end
+        disp('Error from true')
+        norm(uk.dataArray(:)-f_exact.dataArray(:))/norm(f_exact.dataArray(:))
     end
     y = uk;

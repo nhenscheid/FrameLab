@@ -41,12 +41,15 @@ classdef CTData
         end
         
         function c = plus(a,b)
-            %add an array to a CTData object
-            %
-            if(size(a.dataArray)~=size(b))
-                error('Array dimension mismatch!')
+            %add two CTData objects
+            if(isa(a,'DataTypes.CTData')&&isa(b,'DataTypes.CTData'))
+                if(size(a.dataArray)~=size(b.dataArray))
+                    error('Array dimension mismatch!')
+                end
+                c = DataTypes.CTData(a.scanner,a.dataArray+b.dataArray,a.dataArrayNorm+b.dataArrayNorm,a.L);
+            else
+                c = DataTypes.CTData(a.scanner,a.dataArray+b,a.dataArrayNorm+b,a.L);  
             end
-            c = DataTypes.CTData(a.scanner,a.dataArray+b,a.dataArrayNorm,a.L);
         end
         
         function c = minus(a,b)
@@ -63,6 +66,17 @@ classdef CTData
             %entries
             obj.dataArray = -obj.dataArray;
             obj.dataArrayNorm = -obj.dataArrayNorm;
+        end
+        
+        function y = objdot(obj,obj2)
+            %dot product of two objects of type ObjectData
+            y = dot(obj.dataArray(:),obj2.dataArray(:));
+        end
+        
+        function c = mtimes(alpha,obj)
+            % Multiply this object's dataArray by a scalar or matrix
+            % Should check dimensions, etc
+            c = DataTypes.CTData(obj.scanner,alpha*obj.dataArray,alpha*obj.dataArrayNorm,obj.L);
         end
         
         %John's equation
