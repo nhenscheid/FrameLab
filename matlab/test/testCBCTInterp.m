@@ -5,8 +5,8 @@ clear all;
 % Generate object
 N = 256;
 u0 = DataTypes.ObjectData(3,single(unitBall(N,3)),[2,2,2]); %unit ball, diameter = 2
-lam = 100;
-cgiter = 100;
+lam = 10;
+cgiter = 50;
 cgtol = 1e-8;
 %u1 = DataTypes.ObjectData(3,single(gaussian3D(N)),[5,5,5]);
 %u0 = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
