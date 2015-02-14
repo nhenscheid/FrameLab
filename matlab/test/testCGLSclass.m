@@ -47,7 +47,6 @@ imshow(y.dataArray,[]);
 
 %% Test cone beam reconstruction using CGLS
 
-% <<<<<<< HEAD
 % lam = 10;
 % cbct = Operators.ConeBeamScanner(64,64,64);
 % A = @(x)cbct.apply(x);
@@ -57,12 +56,13 @@ imshow(y.dataArray,[]);
 % =======
 lam = 1;
 %cbct = Operators.ConeBeamScanner('circle',64,64,64);
-cbct = Operators.ConeBeamScanner('helix',128,128,[],2,2,0.5,32);
+nd = 128;
+N = 64;
+cbct = Operators.ConeBeamScanner('helix',nd,nd,[],2,2,0.5,32);
 A = @(x)cbct.apply(x);
-At = @(x)cbct.applyAdjoint(x);
-u3d = DataTypes.ObjectData(3,single(phantom3d(64)),[2,2,2]);
-u03d = DataTypes.ObjectData(3,single(zeros(64,64,64)),[2,2,2]);
->>>>>>> c76969b53dc984f71ac2a68a3e04d7bf598778c2
+At = @(x)cbct.applyAdjoint(x,[N,N,N]);
+u3d = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
+u03d = DataTypes.ObjectData(3,single(zeros(N,N,N)),[2,2,2]);
 cgiter = 100;
 cgtol = 1e-14;
 

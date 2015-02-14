@@ -2,7 +2,7 @@
 %% Fan beam geometry
 N = 1000;
 u0 = DataTypes.ObjectData(2,single(unitBall(N,2)),[2,2]);
-nd = 10;
+nd = 200;
 nv = 1;
 fbct = Operators.FanBeamScanner(nd,nv)
 y = fbct.apply(u0);
@@ -55,7 +55,7 @@ clear all;
 N = 256;
 u0 = DataTypes.ObjectData(3,single(unitBall(N,3)),[2,2,2]); %unit ball, diameter = 2
 nd = 256;
-nv = 32;
+nv = 256;
 disp('Testing helical scan');
 cbct = Operators.ConeBeamScanner('helix',nd,nd,[],2,4,2,nv);
 cbct.verbose = true;
@@ -79,13 +79,13 @@ disp(sprintf('%s%d\n','L2 error for normalized transform is ',sqrt(sum(abs(yExac
 
 %% Multihelix
 clear all;
-N = 256;
+N = 384;
 u0 = DataTypes.ObjectData(3,single(unitBall(N,3)),[2,2,2]); %unit ball, diameter = 2
 nd = 128;
-rps = 4;
-fps = 64;
-zmax = 2;
-vtab = 2;
+rps = 0.1;
+fps = 128;
+zmax = 0.1;
+vtab = 0.1;
 nHelix = 2;
 dphi = 2*pi*rps/fps;
 phaseShift = dphi*(0:nHelix-1);
@@ -112,6 +112,8 @@ for i=1:nHelix
     yApproxNorm = y.dataArrayNorm(:,:,:,i);
     disp(sprintf('%s%d\n','L2 error for unnormalized transform is ',sqrt(sum(abs(yExact(:)-yApprox(:)).^2))/sqrt(sum(abs(yExact(:))))))
     disp(sprintf('%s%d\n','L2 error for normalized transform is ',sqrt(sum(abs(yExactNorm(:)-yApproxNorm(:)).^2))/sqrt(sum(abs(yExactNorm(:))))))
+    disp(sprintf('%s%d\n','max error for unnormalized transform is ',max(abs(yExact(:)-yApprox(:)))/max(abs(yExact(:)))))
+    disp(sprintf('%s%d\n','max error for normalized transform is ',max(abs(yExactNorm(:)-yApproxNorm(:)))/max(abs(yExactNorm(:)))))
 end
 
 

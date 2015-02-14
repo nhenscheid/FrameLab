@@ -7,7 +7,7 @@ function y = changeScanner(ctData,objectData,dir)
     scanner1 = ctData.scanner;
     na = scanner1.na;
     nb = scanner1.nb;
-    nv = scanner1.nv;
+    nv = scanner1.nv/scanner1.nHelix;
     zmax = scanner1.zmax;
     rps = scanner1.rps;
     vtab = scanner1.vtab;
@@ -15,20 +15,28 @@ function y = changeScanner(ctData,objectData,dir)
     dphi = 2*pi*rps/fps;
     
     if strcmp(dir,'down')
-        nHelix = 1;
-        phaseShift = 0;
-        scanner2 = Operators.ConeBeamScanner('multiHelix',na,nb,nv,zmax,rps,vtab,fps,nHelix,phaseShift);
-        scanner2.setPara(objectData);
-        y = DataTypes.CTData(scanner2,ctData.dataArray(:,:,:,1),ctData.dataArrayNorm(:,:,:,1),ctData.L);
-    elseif strcmp(dir,'up')
         nHelix = 2;
-        phaseShift = dphi*(0:nHelix-1); 
+        phaseShift = dphi*(0:nHelix-1);
         scanner2 = Operators.ConeBeamScanner('multiHelix',na,nb,nv,zmax,rps,vtab,fps,nHelix,phaseShift);
         scanner2.setPara(objectData);
         dataArray = single(zeros(na,nb,nv,2));
         dataArrayNorm = single(zeros(na,nb,nv,2));
-        dataArray(:,:,:,1) = ctData.dataArray;
-        dataArrayNorm(:,:,:,1) = ctData.dataArrayNorm;
+        dataArray(:,:,:,1) = ctData.dataArray(:,:,:,1);
+        dataArray(:,:,:,2) = ctData.dataArray(:,:,:,3);
+        dataArrayNorm(:,:,:,1) = ctData.dataArrayNorm(:,:,:,1);
+        dataArrayNorm(:,:,:,2) = ctData.dataArrayNorm(:,:,:,3);
+        y = DataTypes.CTData(scanner2,dataArray,dataArrayNorm,ctData.L);
+    elseif strcmp(dir,'up')
+        nHelix = 3;
+        phaseShift = dphi*(0:nHelix-1); 
+        scanner2 = Operators.ConeBeamScanner('multiHelix',na,nb,nv,zmax,rps,vtab,fps,nHelix,phaseShift);
+        scanner2.setPara(objectData);
+        dataArray = single(zeros(na,nb,nv,3));
+        dataArrayNorm = single(zeros(na,nb,nv,3));
+        dataArray(:,:,:,1) = ctData.dataArray(:,:,:,1);
+        dataArray(:,:,:,3) = ctData.dataArray(:,:,:,2);
+        dataArrayNorm(:,:,:,1) = ctData.dataArrayNorm(:,:,:,1);
+        dataArrayNorm(:,:,:,3) = ctData.dataArrayNorm(:,:,:,2);
         y = DataTypes.CTData(scanner2,dataArray,dataArrayNorm,ctData.L);
     else
         error('dir can only be up or down');

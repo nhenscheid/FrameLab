@@ -25,6 +25,7 @@ classdef ConeBeamScanner < handle
     properties
         verbose = false; %To display diagnostic messages
         GPU = 1;  % Set to 0 to force using CPU
+        johnMatrix;
     end
     
     methods
@@ -77,6 +78,8 @@ classdef ConeBeamScanner < handle
         
         %***Adjoint operator***%
         y = applyAdjoint(this,object,N)
+        
+        generateJohnMatrix(cbct)
     end %Methods 
     
     methods (Static = true)

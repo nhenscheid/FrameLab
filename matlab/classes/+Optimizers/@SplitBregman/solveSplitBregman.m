@@ -4,7 +4,6 @@ function u = solveSplitBregman(obj)
     At = obj.At;
     W = obj.W;
     Wt = obj.Wt;
-    mu = obj.mu;
     f = obj.f;
     u0 = obj.u0;
     Niter = obj.globalIter;
@@ -37,7 +36,7 @@ function u = solveSplitBregman(obj)
         %v = v + (Wu-alpha);
         % Step 4: update CGLS solver
         b = Atf + mu*Wt(alpha-v);
-        clear solver;
+        clear cgSolver;
         cgSolver = Optimizers.CGLS(A,At,b,u,mu,cgIter,cgTol);
     end
     

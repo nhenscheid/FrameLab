@@ -35,7 +35,7 @@ end
 %%%%%%%%%%%%%%%%% *** DO NOT MODIFY BELOW THIS LINE *** %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%NOTE: Must leave a space at the beginning of each file name!
+%!!NOTE!!: Must leave a space at the beginning of each file name!
 Ax_fan_mf = [' Ax_fan_mf.cpp',' Ax_fan_mf_cpu_siddon.cpp',...
            ' Ax_fan_mf_cpu_new.cpp',' Ax_fan_mf_cpu_new_fb.cpp',...
            ' Ax_fan_mf_gpu_siddon.cu',' Ax_fan_mf_gpu_new.cu',...
@@ -58,8 +58,7 @@ Ax_fan_mf_cpu = [' Ax_fan_mf_cpu.cpp',' Ax_fan_mf_cpu_new.cpp',...
 Ax_cone_mf_cpu = [' Ax_cone_mf_cpu.cpp',...
                   ' Ax_cone_mf_cpu_new.cpp',' sort_alpha.cpp'];
 
-% For some reason, the cuda machine only likes linking to matlab's built-in
-% libcudart.
+              
 %GPUFLAGS = sprintf('-v -L"%s" -lcudart -I"./"',CUDALIB);
 GPUFLAGS = sprintf('-v -L -lcudart -I"./"');
 CPUFLAGS = '-v -I"./"';

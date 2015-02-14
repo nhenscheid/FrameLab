@@ -5,21 +5,21 @@ clear all;
 % Generate object
 N = 256;
 u0 = DataTypes.ObjectData(3,single(unitBall(N,3)),[2,2,2]); %unit ball, diameter = 2
-lam = 0.125;
-cgiter = 10;
-cgtol = 1e-8;
-%u1 = DataTypes.ObjectData(3,single(gaussian3D(N)),[5,5,5]);
+lam = 1;
+cgiter = 100;
+cgtol = 1e-10;
+%u0 = DataTypes.ObjectData(3,single(gaussian3D(N)),[5,5,5]);
 %u0 = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
 
 % Set up the scanner
-nd = 64;
-rps = 1;
-fps = 16;
-zmax = 1;
-vtab = 1;
+nd = 32;
+rps = 4;
+fps = 32;
+zmax = 2;
+vtab = 2;
 nHelix = 1;
 dphi = 2*pi*rps/fps;
-phaseShift = dphi*(0:nHelix-1);
+phaseShift = [0, dphi];
 cbct = Operators.ConeBeamScanner('multiHelix',nd,nd,[],zmax,rps,vtab,fps,nHelix,phaseShift);
 nHelix2 = 2;
 phaseShift2 = dphi*(0:nHelix2-1);
@@ -43,9 +43,11 @@ f = RLt(f0);
 b = RLt(f0);
 
 iMain = 0;
-mainIter = 10;
+mainIter = 20;
+
 % CGLS
     while iMain < mainIter
+        iMain = iMain+1;
         rk = A(f)-b;
         pk = -rk;
         %uk = f;
@@ -69,7 +71,10 @@ mainIter = 10;
             end
             disp('Error from true')
             norm(f.dataArray(:)-f_exact.dataArray(:))/norm(f_exact.dataArray(:))
+            hold off,plot(f.dataArray(:,10,10,2)),hold on,plot(f_exact.dataArray(:,10,10,2)),drawnow
         end
-        lam = lam*2
+        lam = 1.5*lam
+        clear A
+        A = @(x)(lam*RLt(RL(x))+DtD(x))
     end
     
