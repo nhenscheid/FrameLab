@@ -3,13 +3,13 @@
 clear all;
 
 % Generate object
-N = 128;
+N = 256;
 u0 = DataTypes.ObjectData(3,single(unitBall(N,3)),[2,2,2]); %unit ball, diameter = 2
 u1 = DataTypes.ObjectData(3,single(gaussian3D(N)),[5,5,5]);
 %u0 = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
 
 % Set up the scanner
-nd = 64;
+nd = 128;
 rps = 1;
 fps = 32;
 zmax = 1;
@@ -41,6 +41,6 @@ g = cbct.apply(u1);
 % disp(sprintf('%s%d\n','max(D)=',max(D(:))))
 
 
-D = f.applyJohnNormal(0);
+D = g.applyJohnNormal(0);
 %size(f.dataArrayNorm)
 %D2 = f.applyJohn(0);

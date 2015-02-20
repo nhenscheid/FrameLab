@@ -1,22 +1,34 @@
 % Testing Cone Beam reconstruction with cgls
 clear all;
 
-lam = 0.1;
+lam = 0.01;
 
 
+nd = 64;
+rps = 1;
+fps = 128;
+nv = 64;
+zmax = 1;
+vtab = 1;
+NTrue = 64;
+NRecon = 64;
 
-u = DataTypes.ObjectData(3,single(phantom3d(128)),[10,10,10]);
-cbct = Operators.ConeBeamScanner(256,256,32);
-A = @(x)(cbct.applyAdjoint(cbct.apply(x))+lam*x);
+%cbct = Operators.ConeBeamScanner('helix',nd,nd,[],zmax,rps,vtab,fps);
+cbct = Operators.ConeBeamScanner('circle',nd,nd,nv);
+
+u = DataTypes.ObjectData(3,single(phantom3d(NTrue)),[2,2,2]);
+
+
+A = @(x)(cbct.applyAdjoint(cbct.apply(x),[NRecon,NRecon,NRecon])+lam*x);
 f0 = cbct.apply(u);
 
-rhs = cbct.applyAdjoint(f0); 
+rhs = cbct.applyAdjoint(f0,[NRecon,NRecon,NRecon]); 
 
 rk = -rhs;
 
 pk = rhs;
 
-uk = DataTypes.ObjectData(3,single(zeros(128,128,128)),[10,10,10]);
+uk = DataTypes.ObjectData(3,single(zeros(NRecon,NRecon,NRecon)),[2,2,2]);
 
 gammaold = rk.objdot(rk);
 
