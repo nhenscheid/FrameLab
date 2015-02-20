@@ -1,4 +1,4 @@
-function D = applyJohnNormal(obj,smoothed)
+function D = applyJohn(obj,smoothed)
     %D=applyJohnNormal(CTData,smoothed) 
     %Apply DtD for John's equation, for a multiHelix scan
     %Smoothed = 1 if we apply to a smoothed version, 0 else
@@ -15,12 +15,12 @@ function D = applyJohnNormal(obj,smoothed)
     nb = double(cbct.nb);
     SO = double(cbct.SO);
     OD = double(cbct.OD);
-    cos_phi = para.cos_phi;
-    sin_phi = para.sin_phi;
-    sd_z = scale*para.sd_z;
+    %cos_phi = para.cos_phi;
+    %sin_phi = para.sin_phi;
+    %sd_z = scale*para.sd_z;
     h = cbct.vtab/(2*pi*cbct.rps); 
-    y_det = scale*(cbct.para.y_det);
-    z_det = scale*(cbct.para.z_det);
+    y_det = double(scale*(cbct.para.y_det));
+    z_det = double(scale*(cbct.para.z_det));
     phaseShift = cbct.phaseShift;
     
     g = obj.dataArrayNorm;
@@ -38,10 +38,10 @@ function D = applyJohnNormal(obj,smoothed)
     % Compute approximate John's equation 
     disp('approximating Johns Equation')
     R = double(SO+OD);
-    dzeta = double(-phaseShift(2)*h); %This assumes that each phase shift is the same?
-    dtheta = double(2*pi*cbct.rps/cbct.fps);
-    da = double(scale*cbct.para.dy_det);
-    db = double(scale*cbct.para.dz_det);
+    dzeta = double(phaseShift(2)*h) %This assumes that each phase shift is the same?
+    dtheta = double(2*pi*cbct.rps/cbct.fps)
+    da = double(scale*cbct.para.dy_det)
+    db = double(scale*cbct.para.dz_det)
     
     % Upgrade g to a double matrix (Matlab can only do sparse doubles) 
     g = double(g);

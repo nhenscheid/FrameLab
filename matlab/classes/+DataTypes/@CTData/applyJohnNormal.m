@@ -42,7 +42,7 @@ function D = applyJohnNormal(obj,smoothed)
     % Compute approximate John's equation 
     disp('approximating Johns Equation')
     R = double(SO+OD);
-    dzeta = double(-phaseShift(2)*h); %This assumes that each phase shift is the same?
+    dzeta = double(phaseShift(2)*h); %This assumes that each phase shift is the same?
     dtheta = double(2*pi*cbct.rps/cbct.fps);
     da = double(scale*cbct.para.dy_det);
     db = double(scale*cbct.para.dz_det);

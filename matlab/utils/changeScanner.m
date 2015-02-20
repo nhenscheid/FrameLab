@@ -16,7 +16,8 @@ function y = changeScanner(ctData,objectData,dir)
     
     if strcmp(dir,'down')
         nHelix = 2;
-        phaseShift = dphi*(0:nHelix-1);
+        %phaseShift = dphi*(0:nHelix-1);
+        phaseShift = [0 2*dphi];
         scanner2 = Operators.ConeBeamScanner('multiHelix',na,nb,nv,zmax,rps,vtab,fps,nHelix,phaseShift);
         scanner2.setPara(objectData);
         dataArray = single(zeros(na,nb,nv,2));
@@ -28,7 +29,8 @@ function y = changeScanner(ctData,objectData,dir)
         y = DataTypes.CTData(scanner2,dataArray,dataArrayNorm,ctData.L);
     elseif strcmp(dir,'up')
         nHelix = 3;
-        phaseShift = dphi*(0:nHelix-1); 
+        %phaseShift = dphi*(0:nHelix-1); 
+        phaseShift = [0 dphi 2*dphi];
         scanner2 = Operators.ConeBeamScanner('multiHelix',na,nb,nv,zmax,rps,vtab,fps,nHelix,phaseShift);
         scanner2.setPara(objectData);
         dataArray = single(zeros(na,nb,nv,3));
