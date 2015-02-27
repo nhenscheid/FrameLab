@@ -29,15 +29,13 @@ close all;
 nd = 128;
 rps = 1;
 fps = 32;
-zmax = 1;
+zmax = 2;
 vtab = 1;
 %nHelix = 3;
 %dphi = 2*pi*rps/fps;
 %phaseShift = dphi*(0:nHelix-1);
 %cbct = Operators.ConeBeamScanner('multiHelix',nd,nd,[],zmax,rps,vtab,fps,nHelix,phaseShift);
 cbct = Operators.ConeBeamScanner('helix',nd,nd,[],zmax,rps,vtab,fps);
-A = @(x)cbct.apply(x);
-At = @(x)cbct.applyAdjoint(x);
 
 % Generate phantom, projection and initial guess
 NTrue = 128;
@@ -45,12 +43,21 @@ NTrue = 128;
 %utrue=single(I)./max(max(max(I)));clear I;
 uTrue = DataTypes.ObjectData(3,single(phantom3d(NTrue)),[2,2,2]);
 NRecon = 128;
-u0 = DataTypes.ObjectData(3,single(zeros(NRecon,NRecon,NRecon)),[2,2,2]);
+%u0 = DataTypes.ObjectData(3,single(zeros(NRecon,NRecon,NRecon)),[2,2,2]);
+
+A = @(x)cbct.apply(x);
+At = @(x)cbct.applyAdjoint(x,[NRecon,NRecon,NRecon]);
+
 f0 = A(uTrue)
+Atf0 = At(f0);  % Backprojected data
+u0 = Atf0;
+
 % Add Gaussian noise with deviation sigma to data
 %NOISE CURRENTLY DISABLED
-%f0 = f0+sigma*randn(cbct.na,cbct.nb,cbct.nv);
-Atf0 = At(f0);  % Backprojected data
+f0 = f0+sigma*randn(cbct.na,cbct.nb,cbct.nv);
+
+% Create true array for error computation 
+uTrue = DataTypes.ObjectData(3,single(phantom3d(NRecon)),[2,2,2]);
 
 % Create framelet transforms 
 framelet = Transforms.FrameletSystem(3,'linear',1);
@@ -77,7 +84,7 @@ tic
 
 % Create CGLS class to solve least squares
 cgiter=50;
-cgtol=1e-12;
+cgtol=1e-10;
 b = Atf0+mu*Wt(alpha-v);
 solver = Optimizers.CGLS(A,At,b,u0,mu,cgiter,cgtol);
 

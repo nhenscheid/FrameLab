@@ -11,12 +11,12 @@ cbct = Operators.ConeBeamScanner('circle',na,nb,nv);
 cbct.GPU = 1;
 
 % Compute random 3D array and apply cone beam transform 
-x = DataTypes.ObjectData(3,rand(N,N,N),[2,2,2]);
+x = DataTypes.ObjectData(3,single(rand(N,N,N)),[2,2,2]);
 Ax = cbct.apply(x);
 
 % Compute random CT data set and apply adjoint 
-y = DataTypes.CTData('cone',rand(na,nb,nv),cbct.para,[2,2,2]);
-Aty = cbct.applyAdjoint(y);
+y = DataTypes.CTData(cbct,single(rand(na,nb,nv)),[],[2,2,2]);
+Aty = cbct.applyAdjoint(y,[N,N,N]);
 
 % Test <Ax,y> = <x,Aty>
 % (Should write a dot method for these data types)
@@ -33,8 +33,8 @@ x = DataTypes.ObjectData(3,rand(N,N,N),[2,2,2]);
 Ax = cbct.apply(x);
 
 % Compute random CT data set and apply adjoint 
-y = DataTypes.CTData('cone',rand(na,nb,cbct.nv),cbct.para,[2,2,2]);
-Aty = cbct.applyAdjoint(y);
+y = DataTypes.CTData(cbct,single(rand(na,nb,cbct.nv)),[],[2,2,2]);
+Aty = cbct.applyAdjoint(y,[N,N,N]);
 
 % Test <Ax,y> = <x,Aty>
 % (Should write a dot method for these data types)
@@ -52,8 +52,8 @@ x = DataTypes.ObjectData(3,single(phantom3d(N)),[2,2,2]);
 Ax = cbct.apply(x);
 
 % Compute random CT data set and apply adjoint 
-y = DataTypes.CTData('cone',rand(na,nb,cbct.nv),cbct.para,[2,2,2]);
-Aty = cbct.applyAdjoint(y);
+y = DataTypes.CTData(cbct,single(rand(na,nb,cbct.nv)),[],[2,2,2]);
+Aty = cbct.applyAdjoint(y,[N,N,N]);
 
 % Test <Ax,y> = <x,Aty>
 % (Should write a dot method for these data types)
