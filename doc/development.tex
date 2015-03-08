@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{fullpage}
-
+\usepackage{framelab}
 \usepackage{verbatim}
 
 
@@ -14,17 +14,20 @@
 \section{Overall Design}
 FrameLab 1.0 is designed to have an object-oriented, user friendly scripting interface with compute intensive routines written in compiled languages such as C and CUDA/C.  The current scripting language is Matlab, using MEX as an interface mechanism to pull in compiled libraries.  In the future we plan to implement Python/iPython as an alternative to Matlab, to keep the entire code open-source.
 
-\section{Matlab OOP System}
-The primary goal of Framelab is to solve general linear inverse problems of the sort 
-\begin{align*}
-Au = f_0 + \eta 
-\end{align*} FrameLab supports models of the type: 
-\begin{align*}
-\min R(u) \quad \text{such that}\quad F(u)<\epsilon 
-\end{align*}where $R(u)$ is a generic regularization term, typically of the form 
-\begin{align*}
-R(u) = \|Wu\|_1
-\end{align*}
+\section{Matlab Object Oriented System}
+The current goal of Framelab is to solve approximate versions of linear inverse problems of the sort 
+\begin{align}
+\mathcal{A}u = f \label{IDLIP}
+\end{align}Through some discretization, \eqref{IDLIP} is approximated by a finite dimensional linear system 
+\begin{align}
+A\textbf{u} = \textbf{f}\label{FDLIP}
+\end{align}To handle more general and complicated problems of this type, we define an object-oriented system where $A$, $\textbf{u}$ and $\textbf{f}$ are \textbf{abstract} data types instead of simply matrices and vectors.  
+\begin{enumerate}
+\item DataTypes: To allow for a flexible modeling system, for each problem of type \eqref{IDLIP},\eqref{FDLIP} we create an abstract data type for both $\textbf{u}$ and $\textbf{f}$.  
+\item Operators: To model the linear operator $A$, we again use abstract data types.  Thus we define a class for each $A$, for example the ConeBeamScanner transform class.
+\end{enumerate}
+
+
 
 
 \section{Compute Kernels}

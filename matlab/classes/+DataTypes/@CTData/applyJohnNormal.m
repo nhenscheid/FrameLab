@@ -42,7 +42,7 @@ function D = applyJohnNormal(obj,smoothed)
     % Compute approximate John's equation 
     disp('approximating Johns Equation')
     R = double(SO+OD);
-    dzeta = double(-phaseShift(2)*h); %This assumes that each phase shift is the same?
+    dzeta = double(phaseShift(2)*h); %This assumes that each phase shift is the same?
     dtheta = double(2*pi*cbct.rps/cbct.fps);
     da = double(scale*cbct.para.dy_det);
     db = double(scale*cbct.para.dz_det);
@@ -115,22 +115,22 @@ function D = applyJohnNormal(obj,smoothed)
 %     ByteSize(Dfull)
 %     
     
-    gtb = reshape(Dtb*g(:),[na,nb-2,nv-2,nz]);
+    %gtb = reshape(Dtb*g(:),[na,nb-2,nv-2,nz]);
     
     % gaz, gbz
-    if(nz<3)     
-        gaz = reshape(Daz*g(:),[na-2,nb,nv,nz-1]);
-        gbz = reshape(Dbz*g(:),[na,nb-2,nv,nz-1]);
-    else
-        gaz = reshape(Daz*g(:),[na-2,nb,nv,nz-2]);
-        gbz = reshape(Dbz*g(:),[na,nb-2,nv,nz-2]);
-    end
+    %if(nz<3)     
+    %    gaz = reshape(Daz*g(:),[na-2,nb,nv,nz-1]);
+    %    gbz = reshape(Dbz*g(:),[na,nb-2,nv,nz-1]);
+    %else
+    %    gaz = reshape(Daz*g(:),[na-2,nb,nv,nz-2]);
+    %    gbz = reshape(Dbz*g(:),[na,nb-2,nv,nz-2]);
+    %end
     % gb
-    gb = reshape(Db*g(:),[na,nb-2,nv,nz]);
+    %gb = reshape(Db*g(:),[na,nb-2,nv,nz]);
     % gbb
-    gbb = reshape(Dbb*g(:),[na,nb-2,nv,nz]);
+    %gbb = reshape(Dbb*g(:),[na,nb-2,nv,nz]);
     % gab
-    gab = reshape(Dab*g(:),[na-2,nb-2,nv,nz]);
+    %gab = reshape(Dab*g(:),[na-2,nb-2,nv,nz]);
     % a and b
     
     
@@ -144,11 +144,12 @@ function D = applyJohnNormal(obj,smoothed)
         %disp('norm(D-Dnew)')
         %norm(D(:)-Dnew(:))/norm(D(:))
     else
-        D = R*gtb(2:end-1,:,:,2:end-1) - R*SO*gaz(:,2:end-1,2:end-1,:) -...
-            R*h*gbz(2:end-1,:,2:end-1,:) +...
-            2.*a(2:end-1,2:end-1,2:end-1,2:end-1).*gb(2:end-1,:,2:end-1,2:end-1) +...
-            a(2:end-1,2:end-1,2:end-1,2:end-1).*b(2:end-1,2:end-1,2:end-1,2:end-1).*gbb(2:end-1,:,2:end-1,2:end-1) +...
-            (a(2:end-1,2:end-1,2:end-1,2:end-1).^2+R^2).*gab(:,:,2:end-1,2:end-1);
+%         D = R*gtb(2:end-1,:,:,2:end-1) - R*SO*gaz(:,2:end-1,2:end-1,:) -...
+%             R*h*gbz(2:end-1,:,2:end-1,:) +...
+%             2.*a(2:end-1,2:end-1,2:end-1,2:end-1).*gb(2:end-1,:,2:end-1,2:end-1) +...
+%             a(2:end-1,2:end-1,2:end-1,2:end-1).*b(2:end-1,2:end-1,2:end-1,2:end-1).*gbb(2:end-1,:,2:end-1,2:end-1) +...
+%             (a(2:end-1,2:end-1,2:end-1,2:end-1).^2+R^2).*gab(:,:,2:end-1,2:end-1);
+        Dnew = reshape(Dfull*g(:),[na-2,nb-2,nv-2,nz-2]);
     end
     
    D = reshape((Dfull')*Dnew(:),[na,nb,nv,nz]);

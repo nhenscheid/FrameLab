@@ -45,7 +45,7 @@ step=2^(L-1);
 
 %====another implementation=========================
 ker=zeros(step*(nM-1)+1,1);
-ker(1:step:step*(nM-1)+1,1)=M;
+ker(1:step:step*(nM-1)+1,1) = M;
 lker=floor(length(ker)/2);
 
 if b=='c'

@@ -1,10 +1,10 @@
 function [D,R]=GenerateFrameletFilter(frame)
 if frame==0          %Haar Wavelet
     D{1}=[0 1 1]/2;
-    D{2}=[0 1 -1]/2;
+    D{2}=-[0 1 -1]/2;
     D{3}='cc';
     R{1}=[1 1 0]/2;
-    R{2}=[-1 1 0]/2;
+    R{2}=-[-1 1 0]/2;
     R{3}='cc';
 elseif frame==1      %Piecewise Linear Framelet
     D{1}=[1 2 1]/4;

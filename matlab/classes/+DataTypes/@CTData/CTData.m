@@ -4,6 +4,7 @@ classdef CTData
         dataArray; %array of size [na nb nv] 
         dataArrayNorm;
         L; %Object size 
+        johnMatrix;
     end
     
     properties 
