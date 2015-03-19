@@ -1,6 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage{framelab}
 \usepackage{fullpage}
+\usepackage{multirow}
 
 \begin{document}
 \begin{center}
@@ -101,5 +102,37 @@ Adjoint
 Rg_{\theta b} - RR_s g_{a\zeta} - Rhg_{b\zeta} - 2(ag)_b + (abg)_{bb} + R^2 g_{ab} + (a^2 g)_{ab} 
 \end{align*}
 
+\section{B-Spline Framelets}
+We define the B-splines according to \cite{pcmi} as: 
+\begin{align*}
+\widehat{B}_m(\xi) = e^{-ij\xi/2}\left(\frac{\sin(\xi/2)}{\xi/2}\right)^m,\quad j = m(\text{mod } 2)
+\end{align*}
+Note that if $m$ is even, this defines a symmetric/centered B-spline, and if $m$ is odd, this defines a `standard' B-spline.
+\begin{figure}[ht]
+\begin{center}
+\def\arraystretch{1.25}
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+Type & $m$ & $\psi_0$ & $h_0[k]$ & $h_l[k]$  \\\hline\hline  
+\multirow{1}{*}{Haar} & 1 & $\psi_0 = \chi_{[0,1]}$ & $\frac{1}{2}[0,1,1]$ & $\frac{1}{2}[0,-1,1]$\\\hline 
+\multirow{2}{*}{Linear} & \multirow{2}{*}{2} & \multirow{2}{*}{$\psi_0 = \max\{1-\vert \cdot\vert,0\}$} & \multirow{2}{*}{$\frac{1}{4}[1,2,1]$} & $[-\frac{\sqrt{2}}{4},0,\frac{\sqrt{2}}{4}]$\\
+& & & & $[-\frac{1}{4},\frac{1}{2},-\frac{1}{4}]$\\\hline 
+\multirow{5}{*}{Cubic} & \multirow{5}{*}{4} & \multirow{5}{*}{$\psi_0(x) = \left\{\begin{array}{ll}
+\frac{1}{6}(x+2)^3 & -2\leq x<-1 \\
+-\frac{1}{6}(3x^3+6x^2-4) & -1\leq x<0 \\
+\frac{1}{6}(3x^3 -6x^2 + 4) & 0\leq x< 1\\
+-\frac{1}{6}(x-2)^3 & 1\leq x < 2 \\
+0 & \text{else}
+\end{array}\right.$} & \multirow{5}{*}{$\frac{1}{16}\left[1,4,6,4,1\right]$ }& $\frac{1}{8}[-1,-2,0,2,1]$ \\
+& & & & $\frac{\sqrt{6}}{16}[-1,0,2,-1]$\\
+& & & & $\frac{1}{8}[-1,2,0,-2,1]$\\
+& & & & $\frac{1}{16}[-1,4,-6,4,-1]$\\
+& & & & \\\hline 
+\end{tabular}
+\end{center}
+\caption{Table of framelet data.  Note that $h_l$ are centered i.e. $[0,1/2,1/2] = \left[h_0[-1],h_0[0],h_0[1]\right]$ }
+\end{figure}
 
+\bibliographystyle{plain}
+\bibliography{/home/nick/Documents/research/bib.bib}
 \end{document}

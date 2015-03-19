@@ -1,4 +1,7 @@
 function y=apply(this,object)
+    %Operators.ConeBeamScanner.apply
+    %  apply a forward scan using the given parameters
+    %  Tips: 
     this.setPara(object); %set the Gao parameter struct
     X0 = object.dataArray(:);
     if (gpuDeviceCount==0 || this.GPU == 0)
@@ -16,7 +19,7 @@ function y=apply(this,object)
             disp('Computing forward cone beam transform with GPU');
             this.para
         end
-        [y,yNorm] = Ax_cone_mf(X0,this.para);
+        [y,yNorm] = Ax_cone_mf(X0,this.para); %Call the mex function
     end
     if strcmp(this.type,'circle')
         y = DataTypes.CTData(this,reshape(y,[this.na,this.nb,this.nv]),reshape(yNorm,[this.na,this.nb,this.nv]),object.L);

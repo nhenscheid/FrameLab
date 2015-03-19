@@ -1,5 +1,6 @@
 clear u cbct y Aty;
 
+disp('Testing the ConeBeamScanner Class with a 3D Phantom');
 u = DataTypes.ObjectData(3,single(phantom3d(128)),[10,10,10]);
 cbct = Operators.ConeBeamScanner(256,256,128);
 disp('computing forward transform')
