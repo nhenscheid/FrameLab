@@ -13,7 +13,7 @@ classdef ObjectData < handle & matlab.mixin.Copyable %not sure why handle
         function obj = ObjectData(dim,array,L)
             %!!!INPUT CHECK!!!%
             if nargin>1
-                array = single(array);
+                %array = single(array);  %Not sure why i did this
             end
             if nargin>=1
                 obj.dim = dim;

@@ -1,8 +1,8 @@
 function y=applyAdjoint(this,object,N)
     %***Apply adjoint cone beam operator to an object of type
-    %CTData('cone')
-    % N = [nx,ny,nz]  (in case we want the adjoint array to be a different
-    % size than the original array...)
+    %    CTData('cone')
+    %    N = [nx,ny,nz]  (in case we want the adjoint array to be a different
+    %    size than the original array...)
     N = uint32(N);
     
     if(isempty(fieldnames(this.para)))

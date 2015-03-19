@@ -59,8 +59,8 @@ Ax_cone_mf_cpu = [' Ax_cone_mf_cpu.cpp',...
                   ' Ax_cone_mf_cpu_new.cpp',' sort_alpha.cpp'];
 
               
-%GPUFLAGS = sprintf('-v -L"%s" -lcudart -I"./"',CUDALIB);
-GPUFLAGS = sprintf('-v -L -lcudart -I"./"');
+GPUFLAGS = sprintf('-v -L"%s" -lcudart -I"./"',CUDALIB);
+%GPUFLAGS = sprintf('-v -L -lcudart -I"./"');
 CPUFLAGS = '-v -I"./"';
 
 switch GPU

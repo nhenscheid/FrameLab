@@ -2,20 +2,19 @@ classdef FrameletExpansion
 %classdef FrameletExpansion < handle & matlab.mixin.Copyable
    properties (SetAccess = private)
       dim = 3;
-      frameletType = 'haar';
-      nLevel = 1;
+      frameletSystem;
       frameletArray;
    end
    
    methods
        %***Constructor***%
-       function obj = FrameletExpansion(dim,type,level,frameletArray)
+       function obj = FrameletExpansion(dim,frameletSystem,frameletArray)
            if nargin>0
                obj.dim = dim;
-               obj.frameletType = type;
-               obj.nLevel = level;
-               if nargin==3
+               obj.frameletSystem = frameletSystem;
+               if nargin<3
                    %User did not supply frameletArray, so make an empty one
+                   level = frameletSystem.level;
                    switch type
                        case 'haar'
                            obj.frameletArray = obj.makeCellArray(dim,2,level);
@@ -27,19 +26,21 @@ classdef FrameletExpansion
                            %Throw some error  
                    end%Switch type
                end
-               if nargin==4
+               if nargin==3
                    %User supplied a frameletArray, so use it
                    obj.frameletArray = frameletArray;
                end
            end
        end%Constructor 
        
-       function u = adjointFrameletTransform(obj,sys)
+       function u = adjointFrameletTransform(obj)
            %adjointFrameletTransform computes u = W^T\alpha where \alpha is
            %the framelet expansion data in this object and W^T is specified
            %by the FrameletTransform object sys.
-           u = sys.adjointTransform(obj.frameletArray);
+           u = obj.frameletSystem.adjointTransform(obj.frameletArray);
        end
+       
+       plot(this)
        
        % Operators
        c = plus(a,b);
@@ -67,7 +68,7 @@ classdef FrameletExpansion
                    end
                
                otherwise
-                   %Throw some error
+                   error('Something is wrong.');
            end%Switch dim
        end%makeCellArray
        

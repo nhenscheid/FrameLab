@@ -33,6 +33,9 @@ classdef FrameletSystem
             %u.  The output is an object of type FrameletExpansion.  u is
             %a dim-dimensional Matlab array (should check that
             %dim(u)=obj.dim!!)
+            if(isa(u,'DataTypes.ObjectData'))
+                u = u.dataArray;
+            end
             switch obj.dim
                 case 2
                     alpha = obj.FraDecMultiLevel2D(u,obj.D,obj.level);
@@ -41,7 +44,7 @@ classdef FrameletSystem
                 otherwise
                     %Throw some error
             end
-            alpha = DataTypes.FrameletExpansion(obj.dim,obj.type,obj.level,alpha);
+            alpha = DataTypes.FrameletExpansion(obj.dim,obj,alpha);
        
         end
         
