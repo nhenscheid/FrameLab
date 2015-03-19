@@ -46,6 +46,11 @@ classdef FrameletExpansion
        c = minus(a,b);
        c = mtimes(a,b);    
        
+       function plotData(this,n,m,offset)
+            %currently specialized to 3D.
+            plotphantom3D(this.dataArray,n,m,offset);
+       end
+       
    end%Methods 
    
    methods(Static)
